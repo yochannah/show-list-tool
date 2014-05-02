@@ -1,7 +1,7 @@
 define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], function (React, imjs, Q, Caches, predicates, mixins) {
   'use strict';
 
-  var TIMEOUT = 10000; // ten seconds ought to be enough for anybody.
+  var TIMEOUT = 60000; // sixty seconds ought to be enough for anybody.
   var d = React.DOM;
   var isEditable = predicates.isEditable;
   var countCache = Caches.getCache('count');
@@ -23,7 +23,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
     render: function () {
       var category = this._getCategory();
       return d.li(
-        {className: 'list-group-item' + category},
+        {className: 'template-line list-group-item' + category},
         d.span(
           {className: 'pull-right badge'},
           this.state.count),

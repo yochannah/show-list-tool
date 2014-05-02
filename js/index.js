@@ -39,10 +39,12 @@ require.config({
 require(['react', 'imjs', './listview', 'bootstrap'], function (React, imjs, ListView) {
     'use strict';
 
+    var listName = "PL FlyAtlas_tubules_top";
+    var url = "http://beta.flymine.org/beta";
     var rootNode = document.body;
-    var service = imjs.Service.connect({root: "http://www.flymine.org/query"});
+    var service = imjs.Service.connect({root: url});
 
-    service.fetchList('PL FlyAtlas_brain_top').then(function showList (list) {
+    service.fetchList(listName).then(function showList (list) {
       var listView = new ListView({
         service: service,
         list: list

@@ -2,9 +2,9 @@
 require.config({
     baseUrl: '/js',
     paths: {
-        jquery: '/bower_components/jquery/jquery',
+        jquery: '/bower_components/jquery/dist/jquery',
         underscore: '/bower_components/underscore/underscore',
-        backbone: '/bower_components/backbone/backbone',
+        bootstrap: '/bower_components/bootstrap/dist/js/bootstrap.min',
         react: '/bower_components/react/react',
         jschannel: '/bower_components/jschannel/src/jschannel',
         imjs:  '/bower_components/imjs/js/im'
@@ -16,6 +16,10 @@ require.config({
                 'jquery'
             ],
             exports: 'Backbone'
+        },
+        bootstrap: {
+          deps: ['jquery'],
+          exports: '$'
         },
         jschannel: {
           exports: 'Channel'
@@ -31,7 +35,7 @@ require.config({
     }
 });
 
-require(['react', 'imjs', './listview'], function (React, imjs, ListView) {
+require(['react', 'imjs', './listview', 'bootstrap'], function (React, imjs, ListView) {
     'use strict';
 
     var rootNode = document.body;

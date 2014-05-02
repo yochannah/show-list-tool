@@ -3,7 +3,6 @@ define(['react'], function (React) {
 
   var ListHeading = React.createClass({
     render: function () {
-      console.log(this.props);
       var children = [];
       var title = React.DOM.h1({
           key: 'header',

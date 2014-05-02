@@ -1,8 +1,24 @@
+body {
+    padding: 15px;
+}
+
+.nav-tabs .input-group,
 .breadcrumb .input-group {
     width: 30%;
 }
 .item-list .thumbnail {
     min-height: 80px;
+}
+
+.tab-content {
+    padding: 10px;
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.list-contents {
+    min-height: 400px;
 }
 
 .fade-toggle-enter {

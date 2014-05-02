@@ -1,4 +1,5 @@
-define(['react', './listheading', './listcontents', './breadcrumbs'], function (React, Heading, Contents, BreadCrumbs) {
+define(['react', './listheading', './listcontents', './breadcrumbs', './analysis-tools'],
+    function (React, Heading, Contents, BreadCrumbs, AnalysisTools) {
   'use strict';
 
   var ListView = React.createClass({
@@ -34,6 +35,10 @@ define(['react', './listheading', './listcontents', './breadcrumbs'], function (
           classkeys: this.state.classkeys,
           path: this.state.path,
           filterTerm: this.state.filterTerm
+        }),
+        AnalysisTools({
+          service: this.props.service,
+          list: this.props.list
         }));
     },
     _revertTo: function revertTo (path) {

@@ -19,7 +19,7 @@ define(
     },
     render: function () {
       return React.DOM.div(
-        {},
+        {className: 'list-contents'},
         Pager({
           offset: this.state.offset,
           size: this.state.size,

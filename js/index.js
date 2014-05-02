@@ -3,6 +3,7 @@ require.config({
     baseUrl: '/js',
     paths: {
         jquery: '/bower_components/jquery/dist/jquery',
+        q: '/bower_components/q/q',
         underscore: '/bower_components/underscore/underscore',
         bootstrap: '/bower_components/bootstrap/dist/js/bootstrap.min',
         react: '/bower_components/react/react-with-addons', 

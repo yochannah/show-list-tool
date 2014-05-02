@@ -1,4 +1,4 @@
-define(['react', 'underscore'], function (React, _) {
+define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
   'use strict';
 
   var li = React.DOM.li
@@ -33,13 +33,7 @@ define(['react', 'underscore'], function (React, _) {
       
       return ol(
           {className: 'breadcrumb'},
-          React.DOM.div(
-            {className: 'input-group pull-right'},
-            React.DOM.span(
-              {className: 'input-group-addon'},
-              'Filter'),
-            React.DOM.input(
-              {className: 'form-control', type: 'text', ref: 'filterInput', onChange: this._handleFilterChange})),
+          FilterBox({className: 'pull-right', onChange: this._handleFilterChange}),
           segments,
           li({},
             React.DOM.div(
@@ -57,8 +51,7 @@ define(['react', 'underscore'], function (React, _) {
                 }.bind(this))))));
     },
 
-    _handleFilterChange: function () {
-      var value = this.refs.filterInput.getDOMNode().value;
+    _handleFilterChange: function (value) {
       this.props.updateFilter(value);
     },
 
@@ -78,6 +71,14 @@ define(['react', 'underscore'], function (React, _) {
         var path = model.makePath(props.path);
         var fields = path.getType().fields;
         state.references = _.values(fields).filter(isReference);
+        state.references.sort(function (a, b) {
+          if (a.name > b.name) {
+            return 1;
+          } else if (a.name < b.name) {
+            return -1;
+          }
+          return 0;
+        });
         that.setState(state);
       });
     },

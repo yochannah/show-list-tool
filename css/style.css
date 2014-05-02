@@ -21,6 +21,17 @@ body {
     min-height: 400px;
 }
 
+.template-line {
+}
+
+.template-line p {
+    width: 80%;
+}
+
+.template-line.list-group-item-danger {
+    display: none;
+}
+
 .fade-toggle-enter {
     opacity: 0.01;
     transition: opacity .5s ease-in;

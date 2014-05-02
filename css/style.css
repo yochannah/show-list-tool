@@ -22,6 +22,8 @@ body {
 }
 
 .template-line {
+    height: 100px;
+    transition: height 1s, padding 1s;
 }
 
 .template-line p {
@@ -29,6 +31,13 @@ body {
 }
 
 .template-line.list-group-item-danger {
+    height: 0px;
+    padding: 0px;
+    border: none;
+    margin: 0;
+}
+
+.template-line.list-group-item-danger .badge {
     display: none;
 }
 

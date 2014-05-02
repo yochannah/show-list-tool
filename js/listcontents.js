@@ -4,11 +4,14 @@ define(
 
   'use strict';
 
+  var IS_BLANK = /^\s+$/;
+
   var ListContents = React.createClass({
     displayName: 'ListContents',
     getInitialState: function () {
       return {
         items: [],
+        allItems: [],
         query: {select: []},
         offset: 0,
         size: 12
@@ -43,6 +46,10 @@ define(
     },
     _fetchItems: function (props) {
       var that = this;
+      var state = this.state;
+      state.offset = 0;
+      state.items = state.allItems.filter(matchesFilterTerm(props.filterTerm));
+      this.setState(state);
       props.service.fetchModel().then(function (model) {
         props.service.fetchSummaryFields().then(function (sfs) {
           var fields = sfs[model.makePath(props.path).getType().name];
@@ -60,12 +67,15 @@ define(
             }
           });
 
-          props.service.rows(query).then(function setItems (items) {
-            var state = that.state;
-            state.items = items;
-            state.query = query;
-            that.setState(state);
-          });
+          if (JSON.stringify(query) !== JSON.stringify(state.query)) {
+            props.service.rows(query).then(function setItems (items) {
+              var state = that.state;
+              state.allItems = items;
+              state.items = items.filter(matchesFilterTerm(props.filterTerm));
+              state.query = query;
+              that.setState(state);
+            });
+          }
         });
       });
     }
@@ -73,6 +83,27 @@ define(
   });
 
   return ListContents;
+
+
+  function matchesFilterTerm (filterTerm) {
+    if (filterTerm == null || IS_BLANK.test(filterTerm)) {
+      return function () { return true; };
+    } else {
+      filterTerm = filterTerm.toLowerCase();
+      return function (item) {
+        var i, l, value;
+        for (i = 1, l = item.length; i < l; i++) {
+          if (item[i]) {
+            value = String(item[i]).toLowerCase();
+            if (value.indexOf(filterTerm) >= 0) {
+              return true;
+            }
+          }
+        }
+        return false;
+      };
+    }
+  }
 
   function goBack () {
     var state = this.state;

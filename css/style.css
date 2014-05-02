@@ -4,3 +4,41 @@
 .item-list .thumbnail {
     min-height: 80px;
 }
+
+.fade-toggle-enter {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.fade-toggle-enter.fade-toggle-enter-active {
+    opacity: 1;
+}
+
+.fade-toggle-leave {
+    opacity: 1;
+    transition: opacity .01s ease-in;
+}
+
+.fade-toggle-leave.fade-toggle-leave-active {
+    opacity: 0.01;
+}
+
+.slide-left-enter {
+    position: relative;
+    left: 100%;
+    transition: left .2s ease-in;
+}
+
+.slide-left-enter.slide-toggle-enter-active {
+    left: 0;
+}
+
+.slide-left-leave {
+    position: relative;
+    left: 0;
+    transition: opacity .5s ease-in;
+}
+
+.slide-left-leave.slide-toggle-leave-active {
+    left: -100%;
+}

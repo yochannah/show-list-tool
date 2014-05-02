@@ -39,7 +39,7 @@ define(['react', 'underscore'], function (React, _) {
               {className: 'input-group-addon'},
               'Filter'),
             React.DOM.input(
-              {className: 'form-control', type: 'text'})),
+              {className: 'form-control', type: 'text', ref: 'filterInput', onChange: this._handleFilterChange})),
           segments,
           li({},
             React.DOM.div(
@@ -56,6 +56,12 @@ define(['react', 'underscore'], function (React, _) {
                     a({onClick: this.props.proceedTo.bind(null, ref)}, ref.name));
                 }.bind(this))))));
     },
+
+    _handleFilterChange: function () {
+      var value = this.refs.filterInput.getDOMNode().value;
+      this.props.updateFilter(value);
+    },
+
     componentWillMount: function () {
       this._determineSegments(this.props);
       this._determineReferences(this.props);

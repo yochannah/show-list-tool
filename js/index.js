@@ -5,7 +5,7 @@ require.config({
         jquery: '/bower_components/jquery/dist/jquery',
         underscore: '/bower_components/underscore/underscore',
         bootstrap: '/bower_components/bootstrap/dist/js/bootstrap.min',
-        react: '/bower_components/react/react',
+        react: '/bower_components/react/react-with-addons', 
         jschannel: '/bower_components/jschannel/src/jschannel',
         imjs:  '/bower_components/imjs/js/im'
     },

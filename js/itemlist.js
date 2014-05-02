@@ -17,19 +17,33 @@ define(['react', './listitem'], function (React, ListItem) {
         React.DOM.div({className: 'row'}, items)
       );
     },
+    componentDidMount: function () {
+      this._equaliseHeights();
+    },
     componentDidUpdate: function () {
+      this._equaliseHeights();
+    },
+    _equaliseHeights: function () {
       // Make sure all items have the same height. For appearances, mostly.
-      var i, l, itemNode, node = this.getDOMNode();
+      var i, l, h, lastHeight, itemNode, node = this.getDOMNode();
       var itemNodes = node.querySelectorAll('.thumbnail');
       var maxHeight = 0;
+      var different = false;
       for (i = 0, l = itemNodes.length; i < l; i++) {
         itemNode = itemNodes[i];
-        maxHeight = Math.max(maxHeight, itemNode.getBoundingClientRect().height);
+        h = itemNode.getBoundingClientRect().height;
+        maxHeight = Math.max(maxHeight, h);
+        if (lastHeight) {
+          different = (different || (h !== lastHeight));
+        }
+        lastHeight = h;
       }
-      console.log(maxHeight);
-      for (i = 0, l = itemNodes.length; i < l; i++) {
-        itemNode = itemNodes[i];
-        itemNode.style.height = maxHeight + "px";
+      if (different) { // only normalise if different.
+        console.log('normalising heights to ' + maxHeight + 'px');
+        for (i = 0, l = itemNodes.length; i < l; i++) {
+          itemNode = itemNodes[i];
+          itemNode.style.height = maxHeight + "px";
+        }
       }
 
     }

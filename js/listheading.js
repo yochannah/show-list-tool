@@ -2,6 +2,7 @@ define(['react'], function (React) {
   'use strict';
 
   var ListHeading = React.createClass({
+    displayName: 'ListHeading',
     render: function () {
       var children = [];
       var title = React.DOM.h1({

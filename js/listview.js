@@ -6,6 +6,7 @@ define(['react', './listheading', './listcontents', './breadcrumbs'], function (
     getInitialState: function () {
       return {
         path: this.props.list.type,
+        filterTerm: null,
         classkeys: {}
       }
     },
@@ -24,13 +25,15 @@ define(['react', './listheading', './listcontents', './breadcrumbs'], function (
           path: this.state.path,
           service: this.props.service,
           proceedTo: this._proceedTo,
+          updateFilter: this._setFilterTerm,
           revertTo: this._revertTo
         }),
         Contents({
           service: this.props.service,
           list: this.props.list,
           classkeys: this.state.classkeys,
-          path: this.state.path
+          path: this.state.path,
+          filterTerm: this.state.filterTerm
         }));
     },
     _revertTo: function revertTo (path) {
@@ -39,10 +42,14 @@ define(['react', './listheading', './listcontents', './breadcrumbs'], function (
       this.setState(state);
     },
     _proceedTo: function proceedTo (ref) {
-      var path = this.state.path;
-      var classkeys = this.state.classkeys;
-      path += "." + ref.name;
-      this.setState({path: path, classkeys: classkeys});
+      var state = this.state;
+      state.path += "." + ref.name;
+      this.setState(state);
+    },
+    _setFilterTerm: function setFilterTerm (value) {
+      var state = this.state;
+      state.filterTerm = value;
+      this.setState(state);
     }
   });
 

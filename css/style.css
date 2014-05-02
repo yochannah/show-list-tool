@@ -41,6 +41,11 @@ body {
     display: none;
 }
 
+.template-line .description .match {
+    background: #555;
+    color: #eee;
+}
+
 .fade-toggle-enter {
     opacity: 0.01;
     transition: opacity .5s ease-in;

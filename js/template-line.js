@@ -30,7 +30,47 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
         d.a(
           {className: (this.state.count === 0 ? 'disabled' : ''), onClick: this._handleClick},
           this.state.title),
-        d.p(null, d.small(null, this.props.template.description)));
+        d.p({className: 'description'}, d.small(null, this._renderDescription())));
+    },
+
+    _renderDescription: function () {
+      var unmatch, match;
+      var filterTerm = this.props.filterTerm;
+      var desc = this.props.template.description;
+      if (!filterTerm || !desc) {
+        return desc;
+      }
+
+      var spans = [];
+
+      var key = 0;
+      while (desc.length) {
+        var idx = desc.toLowerCase().indexOf(this.props.filterTerm);
+        if (idx === 0) {
+          match = desc.slice(0, filterTerm.length);
+          spans.push(d.span({className: 'match', key: key++}, match));
+
+          console.log(match);
+
+          desc = desc.slice(filterTerm.length);
+        } else if (idx > 0) {
+          unmatch = desc.slice(0, idx);
+          spans.push(d.span({key: key++}, unmatch));
+          match = desc.slice(idx, idx + filterTerm.length);
+          spans.push(d.span({className: 'match', key: key++}, match));
+          console.log(unmatch);
+          console.log(match);
+
+          desc = desc.slice(idx + filterTerm.length);
+        } else {
+          console.log(desc);
+          spans.push(d.span({key: key++}, desc));
+          desc = '';
+        }
+      }
+
+      return spans;
+
     },
 
     componentWillUnmount: function () {

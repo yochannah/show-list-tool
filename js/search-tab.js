@@ -37,6 +37,7 @@ define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-l
       return TemplateLine({
         template: template,
         key: template.name,
+        filterTerm: this.props.filterTerm,
         service: this.props.service,
         list: this.props.list
       });

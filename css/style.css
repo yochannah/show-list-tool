@@ -37,6 +37,15 @@ body {
     margin: 0;
 }
 
+.enrichment-controls {
+    margin: 0.5em;
+}
+
+.enrichment-controls label,
+.enrichment-controls .form-group {
+    margin-right: 1em;
+}
+
 .template-line.list-group-item-danger .badge {
     display: none;
 }

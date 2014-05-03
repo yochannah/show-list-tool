@@ -1,4 +1,5 @@
-define(['react', './search-tab', './filter-box'], function (React, SearchTab, FilterBox) {
+define(['react', './search-tab', './enrichment-tab', './filter-box'],
+    function (React, SearchTab, EnrichmentTab, FilterBox) {
   'use strict';
 
   var d  = React.DOM
@@ -19,6 +20,7 @@ define(['react', './search-tab', './filter-box'], function (React, SearchTab, Fi
           {id: 'graphs', text: 'Visualise'}
         ],
         templatePromise: this.props.service.fetchTemplates(),
+        widgetPromise: this.props.service.fetchWidgets(),
         filterTerm: null,
         currentTab: 'search'
       };
@@ -72,7 +74,12 @@ define(['react', './search-tab', './filter-box'], function (React, SearchTab, Fi
       });
     },
     _renderEnrichmentTab: function () {
-      return "ENRICHMENT";
+      return EnrichmentTab({
+        service: this.props.service,
+        list: this.props.list,
+        widgetPromise: this.state.widgetPromise,
+        filterTerm: this.state.filterTerm
+      });
     },
     _renderVisualisationTab: function () {
       return "VISUALISATION";

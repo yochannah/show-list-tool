@@ -2,11 +2,18 @@ define([], function () {
 
   return {
     isEditable: isEditable,
-    isAssignableTo: isAssignableTo
+    isAssignableTo: isAssignableTo,
+    eq: eq
   };
 
   function isEditable (c) {
     return c.editable;
+  }
+
+  function eq (prop, value) {
+    return function (thing) {
+      return thing && thing[prop] === value;
+    };
   }
 
   function isAssignableTo (model, pathType, className) {

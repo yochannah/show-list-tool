@@ -8,7 +8,7 @@ define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-l
   var SearchTab = React.createClass({
     displayName: 'SearchTab',
 
-    mixins: [mixins.ComputableState],
+    mixins: [mixins.ComputableState, mixins.Filtered],
 
     getInitialState: function () {
       return { templates: [] };
@@ -16,20 +16,12 @@ define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-l
 
     render: function () {
       var templates = this.state.templates
-                                .filter(this._matchesFilter)
+                                .filter(this.matchesFilter)
                                 .map(this._renderTemplate);
       return d.ul(
         {className: 'list-group'},
         templates
       );
-    },
-
-    _matchesFilter: function (template) {
-      var ft = this.props.filterTerm;
-      if (ft == null) return true;
-      return _.any([template.name, template.description], function (text) {
-        return text ? text.toLowerCase().indexOf(ft) >= 0 : false;
-      });
     },
 
     _renderTemplate: function (template, i) {

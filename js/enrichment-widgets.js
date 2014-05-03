@@ -1,4 +1,4 @@
-define(['react', './mixins', './enrichment-widget-line'], function (React, mixins, EnrichmentWidgetLine) {
+define(['react', 'underscore', './mixins', './enrichment-widget-line'], function (React, _, mixins, EnrichmentWidgetLine) {
   'use strict';
 
   var d = React.DOM;
@@ -17,15 +17,28 @@ define(['react', './mixins', './enrichment-widget-line'], function (React, mixin
                   .map(this._renderWidget));
     },
 
+    _calculateEnrichment: _.memoize(function (list, args) {
+      return list.enrichment(args);
+    }, function (list, args) {
+      return list.name + ':' + JSON.stringify(args);
+    }),
+
     _renderWidget: function (widget, i) {
+      var props = this.props;
+      var enriching = this._calculateEnrichment(
+        props.list,
+        {
+          widget: widget.name,
+          maxp: props.maxp,
+          correction: props.correction,
+          population: props.backgroundPopulation
+        }
+      );
+
       return EnrichmentWidgetLine({
         widget: widget,
         key: widget.name,
-        service: this.props.service,
-        list: this.props.list,
-        correction: this.props.correction,
-        maxp: this.props.maxp,
-        backgroundPopulation: this.props.backgroundPopulation
+        enriching: enriching
       });
     }
   });

@@ -14,8 +14,9 @@ define(['react', './mixins'], function (React, mixins) {
     mixins: [mixins.SetStateProperty, mixins.ComputableState],
 
     render: function () {
+      var category = (this.state.results && this.state.results.length) ? ' list-group-item-success' : '';
       return d.li(
-        {className: 'widget-line list-group-item'},
+        {className: 'widget-line list-group-item' + category},
         d.span(
           {className: 'pull-right badge'},
           (this.state.results ? this.state.results.length : 'enriching')),
@@ -34,14 +35,7 @@ define(['react', './mixins'], function (React, mixins) {
 
     computeState: function (props) {
       var that = this;
-      var enriching = props.list.enrichment({
-        widget: props.widget.name,
-        maxp: props.maxp,
-        correction: props.correction,
-        population: props.backgroundPopulation
-      });
-
-      enriching.then(function (results) {
+      props.enriching.then(function (results) {
         that.setStateProperty('results', results);
       });
     }

@@ -1,5 +1,5 @@
-define(['react', './listheading', './listcontents', './breadcrumbs', './analysis-tools'],
-    function (React, Heading, Contents, BreadCrumbs, AnalysisTools) {
+define(['react', './listcontents', './breadcrumbs'],
+    function (React, Contents, BreadCrumbs, AnalysisTools) {
   'use strict';
 
   var ListView = React.createClass({
@@ -7,7 +7,6 @@ define(['react', './listheading', './listcontents', './breadcrumbs', './analysis
     getInitialState: function () {
       return {
         path: this.props.list.type,
-        filterTerm: null,
         classkeys: {}
       }
     },
@@ -21,12 +20,10 @@ define(['react', './listheading', './listcontents', './breadcrumbs', './analysis
     },
     render: function () {
       return React.DOM.div({},
-        Heading(this.props.list),
         BreadCrumbs({
           path: this.state.path,
           service: this.props.service,
           proceedTo: this._proceedTo,
-          updateFilter: this._setFilterTerm,
           revertTo: this._revertTo
         }),
         Contents({
@@ -34,11 +31,7 @@ define(['react', './listheading', './listcontents', './breadcrumbs', './analysis
           list: this.props.list,
           classkeys: this.state.classkeys,
           path: this.state.path,
-          filterTerm: this.state.filterTerm
-        }),
-        AnalysisTools({
-          service: this.props.service,
-          list: this.props.list
+          filterTerm: this.props.filterTerm
         }));
     },
     _revertTo: function revertTo (path) {
@@ -49,11 +42,6 @@ define(['react', './listheading', './listcontents', './breadcrumbs', './analysis
     _proceedTo: function proceedTo (ref) {
       var state = this.state;
       state.path += "." + ref.name;
-      this.setState(state);
-    },
-    _setFilterTerm: function setFilterTerm (value) {
-      var state = this.state;
-      state.filterTerm = value;
       this.setState(state);
     }
   });

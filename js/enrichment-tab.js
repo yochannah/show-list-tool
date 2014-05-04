@@ -68,7 +68,9 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
         that.setStateProperty('widgets', enrichmentWidgets);
       });
 
-      that.setStateProperty('listPromise', props.service.fetchLists());
+      that.setStateProperty('listPromise', props.service.fetchLists().then(function (lists) {
+        return lists.filter(predicates.eq('status', 'CURRENT'));
+      }));
 
     }
   });

@@ -1,5 +1,5 @@
-define(['react', './search-tab', './enrichment-tab', './filter-box'],
-    function (React, SearchTab, EnrichmentTab, FilterBox) {
+define(['react', './listview', './listheading', './table-tab', './search-tab', './enrichment-tab', './filter-box'],
+    function (React, ListView, Heading, TableTab, SearchTab, EnrichmentTab, FilterBox) {
   'use strict';
 
   var d  = React.DOM
@@ -15,6 +15,8 @@ define(['react', './search-tab', './enrichment-tab', './filter-box'],
     getInitialState: function () {
       return {
         tabs: [
+          {id: 'content', text: 'Explore'},
+          {id: 'table', text: 'Table'},
           {id: 'search', text: 'Search'},
           {id: 'enrich', text: 'Enrich'},
           {id: 'graphs', text: 'Visualise'}
@@ -22,7 +24,7 @@ define(['react', './search-tab', './enrichment-tab', './filter-box'],
         templatePromise: this.props.service.fetchTemplates(),
         widgetPromise: this.props.service.fetchWidgets(),
         filterTerm: null,
-        currentTab: 'search'
+        currentTab: 'content'
       };
     },
 
@@ -36,6 +38,12 @@ define(['react', './search-tab', './enrichment-tab', './filter-box'],
       }.bind(this));
       var tabContent = [];
       switch (this.state.currentTab) {
+        case 'content':
+          tabContent = this._renderContentTab();
+          break;
+        case 'table':
+          tabContent = this._renderTableTab();
+          break;
         case 'search':
           tabContent = this._renderSearchTab();
           break;
@@ -50,6 +58,7 @@ define(['react', './search-tab', './enrichment-tab', './filter-box'],
       var filterBox = FilterBox({className: 'pull-right', onChange: this._handleFilterChange});
 
       return div(null,
+        Heading(this.props.list),
         ul({className: 'nav nav-tabs'}, tabs, filterBox), 
         div({className: 'tab-content'}, tabContent)
       );
@@ -63,6 +72,22 @@ define(['react', './search-tab', './enrichment-tab', './filter-box'],
         state.filterTerm = null;
       }
       this.setState(state);
+    },
+
+    _renderContentTab: function () {
+      return ListView({
+        service: this.props.service,
+        list: this.props.list,
+        filterTerm: this.state.filterTerm
+      });
+    },
+
+    _renderTableTab: function () {
+      return TableTab({
+        service: this.props.service,
+        list: this.props.list,
+        filterTerm: this.state.filterTerm
+      });
     },
 
     _renderSearchTab: function () {

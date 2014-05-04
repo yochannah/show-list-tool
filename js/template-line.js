@@ -1,9 +1,11 @@
-define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], function (React, imjs, Q, Caches, predicates, mixins) {
+define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins', './formatting'],
+    function (React, imjs, Q, Caches, predicates, mixins, formatting) {
   'use strict';
 
   var TIMEOUT = 60000; // sixty seconds ought to be enough for anybody.
   var d = React.DOM;
   var isEditable = predicates.isEditable;
+  var formatNumber = formatting.formatNumber;
   var countCache = Caches.getCache('count');
 
   var TemplateLine = React.createClass({
@@ -15,7 +17,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
     getInitialState: function () {
       return {
         query: {},
-        count: "Counting...",
+        count: null,
         title: this.props.template.title
       };
     },
@@ -26,7 +28,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
         {className: 'template-line list-group-item' + category},
         d.span(
           {className: 'pull-right badge'},
-          this.state.count),
+          (this.state.count != null) ? formatNumber(this.state.count) : (this.state.error || "counting...")),
         d.a(
           {className: (this.state.count === 0 ? 'disabled' : ''), onClick: this._handleClick},
           this.state.title),
@@ -80,10 +82,12 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
     },
 
     _getCategory: function () {
-      if (this.state.error) {
+      if (this.state.error === 'error') {
         return ' list-group-item-danger';
-      } else if (this.state.count === 'timeout') {
+      } else if (this.state.error === 'timeout') {
         return ' list-group-item-warning';
+      } else if (this.state.count === 0) {
+        return ' no-results';
       } else {
         return '';
       }
@@ -126,7 +130,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
 
           timeout = setTimeout(function () {
             req.reject('timeout');
-            state.count = 'timeout';
+            state.error = 'timeout';
             that.setState(state);
           }, TIMEOUT);
 
@@ -145,8 +149,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins'], func
         function onError (to, e) {
           clearTimeout(to);
           var state = that.state;
-          state.count = 'error';
-          state.error = e;
+          state.error = 'error';
           that.setState(state);
         }
 

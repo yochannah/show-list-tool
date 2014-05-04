@@ -4,18 +4,23 @@ define(['react', './listitem'], function (React, ListItem) {
   var ItemList = React.createClass({
     displayName: 'ItemList',
     render: function () {
-      var items = this.props.items.slice(this.props.offset, this.props.offset + this.props.size).map(function (item) {
-        return ListItem({
-          className: 'list-item col-xs-4 col-sm-3 col-md-2',
-          key: item[0],
-          view: this.props.query.select,
-          item: item
-        });
-      }.bind(this));
-      return React.DOM.div(
-        {className: 'container-fluid item-list'},
-        React.DOM.div({className: 'row'}, items)
-      );
+      try {
+        var items = this.props.items.slice(this.props.offset, this.props.offset + this.props.size).map(function (item) {
+          return ListItem({
+            className: 'list-item col-xs-4 col-sm-3 col-md-2',
+            key: item[0],
+            view: this.props.query.select,
+            item: item
+          });
+        }.bind(this));
+        return React.DOM.div(
+          {className: 'container-fluid item-list'},
+          React.DOM.div({className: 'row'}, items)
+        );
+      } catch (e) {
+        console.error(e);
+        return React.DOM.span(null, String(e));
+      }
     },
     componentDidMount: function () {
       this._equaliseHeights();

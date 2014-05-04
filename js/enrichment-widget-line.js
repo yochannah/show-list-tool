@@ -1,7 +1,8 @@
-define(['react', './mixins'], function (React, mixins) {
+define(['react', './mixins', './formatting'], function (React, mixins, formatting) {
   'use strict';
 
   var d = React.DOM;
+  var formatNumber = formatting.formatNumber;
 
   var EnrichmentWidgetLine = React.createClass({
 
@@ -14,12 +15,12 @@ define(['react', './mixins'], function (React, mixins) {
     mixins: [mixins.SetStateProperty, mixins.ComputableState],
 
     render: function () {
-      var category = (this.state.results && this.state.results.length) ? ' list-group-item-success' : '';
+      var category = this._getCategory();
       return d.li(
         {className: 'widget-line list-group-item' + category},
         d.span(
           {className: 'pull-right badge'},
-          (this.state.results ? this.state.results.length : 'enriching')),
+          (this.state.results ? formatNumber(this.state.results.length) : 'enriching')),
         d.a(
           {onClick: this._handleClick},
           this.props.widget.title),
@@ -27,6 +28,17 @@ define(['react', './mixins'], function (React, mixins) {
           {className: 'description'},
           d.small(null, this.props.widget.description)));
 
+    },
+
+    _getCategory: function () {
+      if (this.state.results) {
+        if (this.state.results.length) {
+          return ' list-group-item-success';
+        } else {
+          return ' no-results';
+        }
+      }
+      return '';
     },
 
     _handleClick: function () {
@@ -43,4 +55,5 @@ define(['react', './mixins'], function (React, mixins) {
   });
 
   return EnrichmentWidgetLine;
+
 });

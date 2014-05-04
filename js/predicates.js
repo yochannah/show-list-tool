@@ -1,9 +1,12 @@
 define([], function () {
+  
+  var IS_BLANK = /^\s*$/;
 
   return {
     isEditable: isEditable,
     isAssignableTo: isAssignableTo,
-    eq: eq
+    eq: eq,
+    isBlank: IS_BLANK.test.bind(IS_BLANK)
   };
 
   function isEditable (c) {

@@ -10,11 +10,24 @@ body {
     min-height: 80px;
 }
 
+ul.nav-tabs > li.active > a {
+    bottom: -1px; /* So shouldn't be necessary... */
+}
+
 .tab-content {
     padding: 10px;
-    min-height: 400px;
-    max-height: 600px;
-    overflow-y: auto;
+}
+
+.tab-content .list-group-item .badge {
+    font-size: 20px;
+}
+
+.tab-content .list-group-item.no-results {
+    opacity: 0.5;
+}
+
+.tab-content .list-group-item > a {
+    font-size: 16px;
 }
 
 .list-contents {

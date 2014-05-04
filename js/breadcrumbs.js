@@ -33,7 +33,6 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
       
       return ol(
           {className: 'breadcrumb'},
-          FilterBox({className: 'pull-right', onChange: this._handleFilterChange}),
           segments,
           li({},
             React.DOM.div(
@@ -49,10 +48,6 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
                     {key: i},
                     a({onClick: this.props.proceedTo.bind(null, ref)}, ref.name));
                 }.bind(this))))));
-    },
-
-    _handleFilterChange: function (value) {
-      this.props.updateFilter(value);
     },
 
     componentWillMount: function () {

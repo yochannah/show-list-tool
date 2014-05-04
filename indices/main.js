@@ -36,16 +36,16 @@ require.config({
     }
 });
 
-require(['react', 'imjs', './listview', 'bootstrap'], function (React, imjs, ListView) {
+require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imjs, View) {
     'use strict';
 
     var listName = "PL FlyAtlas_tubules_top";
-    var url = "http://beta.flymine.org/beta";
+    var url = "http://www.flymine.org/query";
     var rootNode = document.body;
     var service = imjs.Service.connect({root: url});
 
     service.fetchList(listName).then(function showList (list) {
-      var listView = new ListView({
+      var listView = new View({
         service: service,
         list: list
       });

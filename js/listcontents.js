@@ -1,14 +1,17 @@
 define(
-    ['react', 'q', 'underscore', 'imjs', './itemlist', './pager', './query-cache'],
-    function (React, Q, _, imjs, ItemList, Pager, Caches) {
+    ['react', 'q', 'underscore', 'imjs', './mixins', './itemlist', './pager', './query-cache'],
+    function (React, Q, _, imjs, mixins, ItemList, Pager, Caches) {
 
   'use strict';
 
-  var IS_BLANK = /^\s+$/;
   var rowCache = Caches.getCache('rows');
 
   var ListContents = React.createClass({
+
     displayName: 'ListContents',
+
+    mixins: [mixins.ComputableState, mixins.BuildsQuery],
+
     getInitialState: function () {
       return {
         items: [],
@@ -42,50 +45,18 @@ define(
         return React.DOM.span(null, e);
       }
     },
-    componentWillMount: function () {
-      console.log("fetching data");
-      this._fetchItems(this.props);
-    },
-    componentWillReceiveProps: function (nextProps) {
-      console.log("Received props", nextProps);
-      this._fetchItems(nextProps);
-    },
-    _fetchItems: function (props) {
+
+    computeState: function (props) {
       var that = this;
       var state = this.state;
       state.offset = 0;
-      state.items = state.allItems.filter(matchesFilterTerm(props.filterTerm));
+      state.items = state.allItems.filter(this.rowMatchesFilter(props.filterTerm));
       this.setState(state);
+
       var modelP = props.service.fetchModel();
       var summaryFieldsP = props.service.fetchSummaryFields();
 
-      Q.spread([modelP, summaryFieldsP], function (model, sfs) {
-        var fields = sfs[model.makePath(props.path).getType().name];
-        var query = {
-          select: [props.path + '.id'].concat(fields.map(function (f) { return props.path + f.replace(/^[^.]+/, ''); })),
-          where: [{path: props.list.type, op: 'IN', value: props.list.name}],
-          joins: {}
-        };
-        fields.forEach(function (fld) {
-          var i, l, fldParts = fld.split('.');
-          for (i = 1, l = fldParts.length; i + 1 < l; i++) {
-            var joinPath = props.path + '.' + fldParts.slice(1, i + 1).join('.');
-            query.joins[joinPath] = 'OUTER';
-          }
-        });
-
-        if (JSON.stringify(query) !== JSON.stringify(state.query)) {
-          var q = new imjs.Query(query, props.service);
-          q.model = model;
-          rowCache.submit(q).then(function setItems (items) {
-            var state = that.state;
-            state.allItems = items;
-            state.items = items.filter(matchesFilterTerm(props.filterTerm));
-            state.query = query;
-            that.setState(state);
-          });
-        }
-      });
+      Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, props));
     }
 
   });
@@ -93,25 +64,6 @@ define(
   return ListContents;
 
 
-  function matchesFilterTerm (filterTerm) {
-    if (filterTerm == null || IS_BLANK.test(filterTerm)) {
-      return function () { return true; };
-    } else {
-      filterTerm = filterTerm.toLowerCase();
-      return function (item) {
-        var i, l, value;
-        for (i = 1, l = item.length; i < l; i++) {
-          if (item[i]) {
-            value = String(item[i]).toLowerCase();
-            if (value.indexOf(filterTerm) >= 0) {
-              return true;
-            }
-          }
-        }
-        return false;
-      };
-    }
-  }
 
   function goBack () {
     var state = this.state;

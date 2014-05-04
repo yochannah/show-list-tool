@@ -1,7 +1,8 @@
 define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
   'use strict';
 
-  var li = React.DOM.li
+  var d  = React.DOM
+    , li = React.DOM.li
     , ol = React.DOM.ol
     , a  = React.DOM.a;
 
@@ -18,6 +19,17 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
 
     render: function () {
 
+      var viewChooser = d.div(
+        {className: 'pull-right btn-group'},
+        d.button(
+          {type: 'button', className: 'btn btn-default', onClick: this.props.onChangeView.bind(null, 'grid')},
+          d.i({className: 'glyphicon glyphicon-th-large'}),
+          d.span({className: '.visible-lg'}, 'Grid')),
+        d.button(
+          {type: 'button', className: 'btn btn-default', onClick: this.props.onChangeView.bind(null, 'table')},
+          d.i({className: 'glyphicon glyphicon-align-justify'}),
+          d.span({className: '.visible-lg'}, 'Table')));
+
       var segments = this.state.segments.map(function (seg, i, a) {
         var isLast = i + 1 == a.length;
         if (isLast) {
@@ -33,6 +45,7 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
       
       return ol(
           {className: 'breadcrumb'},
+          viewChooser,
           segments,
           li({},
             React.DOM.div(

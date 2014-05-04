@@ -1,31 +1,38 @@
-define(['react', './mixins', './table-heading', './table-body', './pager'],
-    function (React, mixins, TableHeading, TableBody, Pager) {
+define(['react', 'q', './mixins', './table-heading', './table-body', './pager'],
+    function (React, Q, mixins, TableHeading, TableBody, Pager) {
 
-  var TableTab = React.createClass({
+  'use strict';
 
-    displayName: 'TableTab',
+  var ContentTable = React.createClass({
+
+    displayName: 'ContentTable',
 
     getInitialState: function () {
       return {
         offset: 0,
         size: 25,
-        total: 0,
-        allSelected: false,
+        items: [],
+        allItems: [],
         query: {select: []}
       };
     },
 
-    mixins: [mixins.SetStateProperty, mixins.ComputableState],
+    mixins: [mixins.BuildsQuery, mixins.SetStateProperty, mixins.ComputableState],
 
     computeState: function (props) {
-      var that = this
-        , type = props.list.type
-        , query = {from: type, where: [{path: type, op: 'IN', value: props.list.name}]};
 
-      props.service.fetchSummaryFields().then(function (sfs) {
-        query.select = ['id'].concat(sfs[type]);
-        that.setStateProperty('query', query);
-      });
+      var that = this
+        , state = this.state
+        , type = props.list.type;
+
+      var modelP = props.service.fetchModel();
+      var summaryFieldsP = props.service.fetchSummaryFields();
+
+      state.offset = 0;
+      state.items = state.allItems.filter(this.rowMatchesFilter(props.filterTerm));
+      this.setState(state);
+
+      Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, props));
 
     },
     
@@ -35,7 +42,7 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
           Pager({
             offset: this.state.offset,
             size: this.state.size,
-            length: this.state.total,
+            length: this.state.items.length,
             back: this._goBack,
             next: this._goNext
           }),
@@ -44,14 +51,12 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
             TableHeading({
               service: this.props.service,
               view: this.state.query.select,
-              onChangeAll: this.setStateProperty.bind(this, 'allSelected')
             }),
             TableBody({
               offset: this.state.offset,
               size: this.state.size,
-              service:    this.props.service,
+              rows:       this.state.items,
               filterTerm: this.props.filterTerm,
-              query:      this.state.query,
               allSelected: this.state.allSelected,
               onCount:    this.setStateProperty.bind(this, 'total')
             })));
@@ -63,13 +68,14 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
 
     _goNext: function () {
       var next = this.state.offset + this.state.size;
-      if (next < this.state.total) {
+      var total = this.state.items.length;
+      if (next < total) {
         this.setStateProperty('offset', next);
       }
     }
 
   });
 
-  return TableTab;
+  return ContentTable;
 });
 

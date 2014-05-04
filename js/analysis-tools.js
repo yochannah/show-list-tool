@@ -23,7 +23,7 @@ define(['react',
       return {
         tabs: [
           {id: 'content', text: 'Explore'},
-          {id: 'table', text: 'Table'},
+          {id: 'table', text: 'Edit'},
           {id: 'search', text: 'Search'},
           {id: 'enrich', text: 'Enrich'},
           {id: 'graphs', text: 'Visualise'}

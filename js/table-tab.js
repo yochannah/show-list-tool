@@ -10,6 +10,7 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
         offset: 0,
         size: 25,
         total: 0,
+        allSelected: false,
         query: {select: []}
       };
     },
@@ -22,7 +23,7 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
         , query = {from: type, where: [{path: type, op: 'IN', value: props.list.name}]};
 
       props.service.fetchSummaryFields().then(function (sfs) {
-        query.select = sfs[type];
+        query.select = ['id'].concat(sfs[type]);
         that.setState({query: query});
       });
 
@@ -42,7 +43,8 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
             {className: 'table table-striped'},
             TableHeading({
               service: this.props.service,
-              view: this.state.query.select
+              view: this.state.query.select,
+              onChangeAll: this.setStateProperty.bind(this, 'allSelected')
             }),
             TableBody({
               offset: this.state.offset,
@@ -50,6 +52,7 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
               service:    this.props.service,
               filterTerm: this.props.filterTerm,
               query:      this.state.query,
+              allSelected: this.state.allSelected,
               onCount:    this.setStateProperty.bind(this, 'total')
             })));
     },

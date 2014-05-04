@@ -13,7 +13,10 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
     mixins: [mixins.ComputableState, mixins.SetStateProperty],
 
     getInitialState: function () {
-      return {rows: []};
+      return {
+        rows: [],
+        selected: {}
+      };
     },
 
     computeState: function (props) {
@@ -49,7 +52,24 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
     },
 
     _renderRow: function (row, i) {
-      return d.tr({key: i}, row.map(this._renderCell));
+      // cell 0 is the id - don't show that.
+      var selectRow = this._handleRowSelection.bind(this, row);
+      return d.tr({key: i, onClick: selectRow},
+          d.td(
+            {className: 'row-selector'},
+            d.input({
+              className: 'form-control',
+              type: 'checkbox',
+              checked: !!(this.props.allSelected || this.state.selected[row[0]])
+            })),
+          row.slice(1).map(this._renderCell));
+    },
+
+    _handleRowSelection: function (row) {
+      var state = this.state;
+      var id = row[0];
+      state.selected[id] = !state.selected[id];
+      this.setState(state);
     },
 
     _renderCell: function (cell, i) {

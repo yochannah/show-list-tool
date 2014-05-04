@@ -1,5 +1,12 @@
-define(['react', './listview', './listheading', './table-tab', './search-tab', './enrichment-tab', './filter-box'],
-    function (React, ListView, Heading, TableTab, SearchTab, EnrichmentTab, FilterBox) {
+define(['react',
+    './listview',
+    './listheading',
+    './table-tab',
+    './search-tab',
+    './enrichment-tab',
+    './filter-box',
+    './visualisation-tab'],
+    function (React, ListView, Heading, TableTab, SearchTab, EnrichmentTab, FilterBox, VisualisationTab) {
   'use strict';
 
   var d  = React.DOM
@@ -107,7 +114,12 @@ define(['react', './listview', './listheading', './table-tab', './search-tab', '
       });
     },
     _renderVisualisationTab: function () {
-      return "VISUALISATION";
+      return VisualisationTab({
+        service: this.props.service,
+        list: this.props.list,
+        widgetPromise: this.state.widgetPromise,
+        filterTerm: this.state.filterTerm
+      });
     },
     _chooseTab: function (ident) {
       var state = this.state;

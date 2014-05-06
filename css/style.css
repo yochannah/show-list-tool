@@ -2,8 +2,21 @@ body {
     padding: 15px;
 }
 
+a,
 .pointer {
     cursor: pointer;
+}
+
+.row-selector {
+    min-width: 20px;
+}
+
+.list-tagger .form-group {
+    margin-right: 0.2em;
+}
+
+.form-control.pval {
+    max-width: 10em;
 }
 
 .nav-tabs .input-group,

@@ -56,6 +56,7 @@ define(['react', 'q', './mixins', './table-heading', './table-body', './pager'],
               offset: this.state.offset,
               size: this.state.size,
               rows:       this.state.items,
+              view: this.state.query.select,
               filterTerm: this.props.filterTerm,
               allSelected: this.state.allSelected,
               onCount:    this.setStateProperty.bind(this, 'total')

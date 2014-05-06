@@ -13,6 +13,7 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
       return {
         path: this.props.list.type,
         view: (localStorage[viewKey] || 'grid'), 
+        selected: {},
         classkeys: {}
       }
     },
@@ -43,6 +44,8 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
         list: this.props.list,
         classkeys: this.state.classkeys,
         path: this.state.path,
+        selected: this.state.selected,
+        onItemSelected: this._onItemSelected,
         filterTerm: this.props.filterTerm
       };
 
@@ -55,6 +58,12 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
       }
 
       return React.DOM.div({}, controls, contents);
+    },
+
+    _onItemSelected: function (id, isSelected) {
+      var state = this.state;
+      state.selected[id] = isSelected;
+      this.setState(state);
     },
 
     _changeView: function (view) {

@@ -11,8 +11,7 @@ define(['react', 'q', './mixins'], function (React, Q, mixins) {
 
     getInitialState: function () {
       return {
-        headers: [],
-        allSelected: false
+        headers: []
       }
     },
 
@@ -30,18 +29,20 @@ define(['react', 'q', './mixins'], function (React, Q, mixins) {
     },
 
     render: function () {
+      var col0;
+      if ('allSelected' in this.props) {
+        col0 = d.input({
+          type: 'checkbox',
+          className: 'form-control',
+          onChange: this._toggleAll,
+          checked: this.props.allSelected
+        });
+      }
       return d.thead(
         null,
         d.tr(
           null,
-          d.th(
-            null,
-            d.input({
-              type: 'checkbox',
-              className: 'form-control',
-              onChange: this._toggleAll,
-              checked: this.state.allSelected
-            })),
+          d.th(null, col0),
           this.state.headers.map(this._renderHeader)));
     },
 

@@ -15,15 +15,12 @@ define(['react', 'underscore'], function (React, _) {
     render: function () {
       var item = this.props.item;
       var view = this.props.view;
+      var iconClass = this.props.selected ? 'fa-star' : 'fa-star-o';
       return div(
         {className: this.props.className},
         div(
-          {className: 'thumbnail'},
-          d.i(
-            {
-              onClick: this._select,
-              className: 'pointer pull-right fa fa-star' + (this.props.selected ? '' : '-o')
-            }),
+          {onClick: this._select, className: 'thumbnail'},
+          d.i({className: 'pointer pull-right fa ' + iconClass}),
           h5(null, strong({}, idents(item, view).join(' '))),
           p(null, line2(item, view)),
           p(null, em({}, subtext(item, view)))));

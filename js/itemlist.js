@@ -4,7 +4,7 @@ define(['react', './listitem'], function (React, ListItem) {
   var ItemList = React.createClass({
 
     getInitialState: function () {
-      return {selected: {}};
+      return {};
     },
 
     displayName: 'ItemList',
@@ -12,12 +12,12 @@ define(['react', './listitem'], function (React, ListItem) {
     render: function () {
       var state = this.state
         , props = this.props
-        , selectionHandler = this._selectionHandler;
+        , selectionHandler = props.onItemSelected;
 
       var items = props.items.slice(props.offset, props.offset + props.size).map(function (item) {
         return ListItem({
           className: 'list-item col-xs-4 col-sm-3 col-md-2',
-          selected: state.selected[item[0]],
+          selected: (props.selected.all || props.selected[item[0]]),
           onChangeSelected: selectionHandler,
           key: item[0],
           view: props.query.select,
@@ -37,12 +37,6 @@ define(['react', './listitem'], function (React, ListItem) {
 
     componentDidUpdate: function () {
       this._equaliseHeights();
-    },
-
-    _selectionHandler: function (id, isSelected) {
-      var state = this.state;
-      state.selected[id] = isSelected;
-      this.setState(state);
     },
 
     _equaliseHeights: function () {

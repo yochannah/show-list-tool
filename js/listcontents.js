@@ -29,6 +29,8 @@ define(
           offset: this.state.offset,
           size: this.state.size,
           length: this.state.items.length,
+          selected: this.props.selected,
+          onAllSelected: this._onAllSelected,
           back: goBack.bind(this),
           next: goNext.bind(this)
         }),
@@ -37,9 +39,15 @@ define(
           query: this.state.query,
           offset: this.state.offset,
           size: this.state.size,
+          selected: this.props.selected,
+          onItemSelected: this.props.onItemSelected,
           classkeys: this.props.classkeys
         })
       );
+    },
+
+    _onAllSelected: function (isSelected) {
+      return this.props.onItemSelected('all', isSelected);
     },
 
     computeState: function (props) {

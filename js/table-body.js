@@ -13,8 +13,7 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
 
     getInitialState: function () {
       return {
-        rows: [],
-        selected: {}
+        rows: []
       };
     },
 
@@ -42,33 +41,37 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
     },
 
     render: function () {
+      try {
       var rows = (this.props.rows || this.state.rows)
         , end = Math.min(rows.length, this.props.offset + this.props.size);
 
       return d.tbody(
         null,
         rows.slice(this.props.offset, end).map(this._renderRow));
+      } catch (e) {
+        console.error(e);
+        return d.div({className: 'alert alert-danger'}, String(e));
+      }
+      
     },
 
     _renderRow: function (row, i) {
       // cell 0 is the id - don't show that.
-      var selectRow = this._handleRowSelection.bind(this, row);
+      var id = row[0];
+      var selectRow = this.props.onItemSelected.bind(null, id, !this.props.selected[id]);
+      var isSelected = this.props.selected.all || this.props.selected[id];
       return d.tr({key: i, onClick: selectRow},
           d.td(
             {className: 'row-selector'},
-            d.input({
-              className: 'form-control',
-              type: 'checkbox',
-              checked: !!(this.props.allSelected || this.state.selected[row[0]])
-            })),
+            d.form(
+              {className: 'form-inline'},
+              d.input({
+                className: 'form-control',
+                type: 'checkbox',
+                readOnly: true,
+                checked: isSelected
+              }))),
           row.slice(1).map(this._renderCell));
-    },
-
-    _handleRowSelection: function (row) {
-      var state = this.state;
-      var id = row[0];
-      state.selected[id] = !state.selected[id];
-      this.setState(state);
     },
 
     _renderCell: function (cell, i) {
@@ -82,7 +85,6 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
       } else {
         value = cell;
       }
-      console.log(view, fieldName);
       return d.td({key: i}, value);
     }
 

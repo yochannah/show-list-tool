@@ -46,7 +46,7 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
           ),
           d.input(
             {
-              className: 'form-control',
+              className: 'form-control pval',
               ref: 'maxp',
               onChange: this._setMaxP,
               value: this.state.maxp,

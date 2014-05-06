@@ -43,6 +43,8 @@ define(['react', 'q', './mixins', './table-heading', './table-body', './pager'],
             offset: this.state.offset,
             size: this.state.size,
             length: this.state.items.length,
+            selected: this.props.selected,
+            onAllSelected: this.props.onItemSelected.bind(null, 'all'),
             back: this._goBack,
             next: this._goNext
           }),
@@ -58,7 +60,8 @@ define(['react', 'q', './mixins', './table-heading', './table-body', './pager'],
               rows:       this.state.items,
               view: this.state.query.select,
               filterTerm: this.props.filterTerm,
-              allSelected: this.state.allSelected,
+              selected: this.props.selected,
+              onItemSelected: this.props.onItemSelected,
               onCount:    this.setStateProperty.bind(this, 'total')
             })));
     },

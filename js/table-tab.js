@@ -1,5 +1,5 @@
-define(['react', './mixins', './table-heading', './table-body', './pager'],
-    function (React, mixins, TableHeading, TableBody, Pager) {
+define(['react', './mixins', './table-heading', './table-body', './pager', './edit-controls'],
+    function (React, mixins, TableHeading, TableBody, Pager, EditControls) {
 
   var TableTab = React.createClass({
 
@@ -10,7 +10,7 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
         offset: 0,
         size: 25,
         total: 0,
-        allSelected: false,
+        selected: {},
         query: {select: []}
       };
     },
@@ -32,10 +32,15 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
     render: function () {
       return React.DOM.div(
           null,
+          EditControls({
+            selected: this.state.selected
+          }),
           Pager({
             offset: this.state.offset,
             size: this.state.size,
             length: this.state.total,
+            selected: this.state.selected,
+            onAllSelected: this._onAllSelected,
             back: this._goBack,
             next: this._goNext
           }),
@@ -44,7 +49,8 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
             TableHeading({
               service: this.props.service,
               view: this.state.query.select,
-              onChangeAll: this.setStateProperty.bind(this, 'allSelected')
+              allSelected: this.state.selected.all,
+              onChangeAll: this._onAllSelected
             }),
             TableBody({
               offset: this.state.offset,
@@ -52,9 +58,20 @@ define(['react', './mixins', './table-heading', './table-body', './pager'],
               service:    this.props.service,
               filterTerm: this.props.filterTerm,
               query:      this.state.query,
-              allSelected: this.state.allSelected,
+              selected:   this.state.selected,
+              onItemSelected: this._selectItem,
               onCount:    this.setStateProperty.bind(this, 'total')
             })));
+    },
+
+    _selectItem: function (id, isSelected) {
+      var state = this.state;
+      state.selected[id] = isSelected;
+      this.setState(state);
+    },
+
+    _onAllSelected: function (isSelected) {
+      this._selectItem('all', isSelected);
     },
 
     _goBack: function () {

@@ -6,7 +6,8 @@ define([], function () {
     isEditable: isEditable,
     isAssignableTo: isAssignableTo,
     eq: eq,
-    isBlank: IS_BLANK.test.bind(IS_BLANK)
+    isBlank: IS_BLANK.test.bind(IS_BLANK),
+    isForList: isForList
   };
 
   function isEditable (c) {
@@ -23,6 +24,10 @@ define([], function () {
     var clazz = model.makePath(className);
 
     return clazz.isa(pathType);
+  }
+
+  function isForList (list, widget) {
+    return widget.targets.indexOf(list.type) >= 0;
   }
 
 });

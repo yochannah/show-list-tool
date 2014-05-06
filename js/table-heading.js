@@ -23,7 +23,13 @@ define(['react', 'q', './mixins'], function (React, Q, mixins) {
         var namings = that.props.view.slice(1).map(function (column) {
           return model.makePath(column).getDisplayName();
         });
-        Q.all(namings).then(that.setStateProperty.bind(that, 'headers'));
+        Q.all(namings)
+         .then(function (names) {
+           var lcp = longestCommonPrefix(names);
+           return names.map(function (name) {
+             return name.slice(lcp.length);
+           });
+         }).then(that.setStateProperty.bind(that, 'headers'));
       });
 
     },
@@ -60,4 +66,16 @@ define(['react', 'q', './mixins'], function (React, Q, mixins) {
   });
 
   return TableHeading;
+
+  function longestCommonPrefix (strings) {
+    var strings = strings.slice(0).sort()
+      , word1 = strings[0]
+      , word2 = strings[strings.length - 1]
+      , l = word1.length
+      , i = 0;
+
+    while(i < l && word1.charAt(i)=== word2.charAt(i)) i++;
+
+    return word1.substring(0, i);
+  }
 });

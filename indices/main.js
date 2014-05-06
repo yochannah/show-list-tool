@@ -1,15 +1,14 @@
 // main.js
-var loc = '../';
 require.config({
-    baseUrl: loc + 'js',
+    baseUrl: 'js',
     paths: {
-        jquery: loc + 'bower_components/jquery/dist/jquery',
-        q: loc + 'bower_components/q/q',
-        underscore: loc + 'bower_components/underscore/underscore',
-        bootstrap: loc + 'bower_components/bootstrap/dist/js/bootstrap.min',
-        react: loc + 'bower_components/react/react-with-addons', 
-        jschannel: loc + 'bower_components/jschannel/src/jschannel',
-        imjs:  loc + 'bower_components/imjs/js/im'
+        jquery: '../bower_components/jquery/dist/jquery',
+        q: '../bower_components/q/q',
+        underscore: '../bower_components/underscore/underscore',
+        bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
+        react: '../bower_components/react/react-with-addons', 
+        jschannel: '../bower_components/jschannel/src/jschannel',
+        imjs: '../bower_components/imjs/js/im'
     },
     shim: {
         backbone: {

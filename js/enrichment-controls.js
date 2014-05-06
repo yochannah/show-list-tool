@@ -96,7 +96,7 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
     _renderRevertButton: function () {
       return d.button(
           {onClick: this._revert, className: 'btn btn-default'},
-          d.i({className: 'glyphicon glyphicon-repeat'}));
+          d.i({className: 'fa fa-refresh'}));
     },
 
     _revert: function (event) {

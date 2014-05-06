@@ -1,4 +1,5 @@
-define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
+define(['react', 'q', 'underscore', './mixins', './dropdown', './filter-box'],
+    function (React, Q, _, mixins, Dropdown, FilterBox) {
   'use strict';
 
   var d  = React.DOM
@@ -10,9 +11,11 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
 
     displayName: 'BreadCrumbs',
 
+    mixins: [mixins.SetStateProperty, mixins.ComputableState],
+
     getInitialState: function () {
       return {
-        references: [],
+        references: [], // Array of pairs: [Ref, Name]
         segments: []
       };
     },
@@ -22,13 +25,21 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
       var viewChooser = d.div(
         {className: 'pull-right btn-group'},
         d.button(
-          {type: 'button', className: 'btn btn-default', onClick: this.props.onChangeView.bind(null, 'grid')},
-          d.i({className: 'glyphicon glyphicon-th-large'}),
-          d.span({className: '.visible-lg'}, 'Grid')),
+          {
+            type: 'button',
+            className: 'btn btn-default' + (this.props.view === 'grid' ? ' active' : ''),
+            onClick: this.props.onChangeView.bind(null, 'grid')
+          },
+          d.i({className: 'fa fa-th-large'}),
+          d.span({className: '.visible-lg'}, ' Grid')),
         d.button(
-          {type: 'button', className: 'btn btn-default', onClick: this.props.onChangeView.bind(null, 'table')},
-          d.i({className: 'glyphicon glyphicon-align-justify'}),
-          d.span({className: '.visible-lg'}, 'Table')));
+          {
+            type: 'button',
+            className: 'btn btn-default' + (this.props.view === 'table' ? ' active' : ''),
+            onClick: this.props.onChangeView.bind(null, 'table')
+          },
+          d.i({className: 'fa fa-th-list'}),
+          d.span({className: '.visible-lg'}, ' Table')));
 
       var segments = this.state.segments.map(function (seg, i, a) {
         var isLast = i + 1 == a.length;
@@ -47,39 +58,27 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
           {className: 'breadcrumb'},
           viewChooser,
           segments,
-          li({},
-            React.DOM.div(
-              {className: 'btn-group'},
-              React.DOM.button(
-                {className: 'btn btn-default', 'data-toggle': 'dropdown'},
-                "Proceed to ",
-                React.DOM.span({className: 'caret'})),
-              React.DOM.ul(
-                {className: 'dropdown-menu', role: 'menu'},
-                this.state.references.map(function (ref, i) {
-                  return li(
-                    {key: i},
-                    a({onClick: this.props.proceedTo.bind(null, ref)}, ref.name));
-                }.bind(this))))));
+          li({}, Dropdown({
+            mainTitle: "Proceed to",
+            links: this.state.references.map(function (ref, i) {
+              return a({onClick: this.props.proceedTo.bind(null, ref[0])}, ref[1]);
+            }.bind(this))
+          })));
     },
 
-    componentWillMount: function () {
-      this._determineSegments(this.props);
-      this._determineReferences(this.props);
-    },
-    componentWillReceiveProps: function (nextProps) {
+    computeState: function (nextProps) {
       this._determineSegments(nextProps);
       this._determineReferences(nextProps);
     },
+
     _determineReferences: function(props) {
       var that = this;
 
       props.service.fetchModel().then(function (model) {
-        var state = that.state;
         var path = model.makePath(props.path);
         var fields = path.getType().fields;
-        state.references = _.values(fields).filter(isReference);
-        state.references.sort(function (a, b) {
+        var references = _.values(fields).filter(isReference);
+        references.sort(function (a, b) {
           if (a.name > b.name) {
             return 1;
           } else if (a.name < b.name) {
@@ -87,9 +86,18 @@ define(['react', 'underscore', './filter-box'], function (React, _, FilterBox) {
           }
           return 0;
         });
-        that.setState(state);
+        var namings = references.map(function (ref) {
+          return path.append(ref.name).getDisplayName();
+        });
+        Q.all(namings).then(function (names) {
+          names = names.map(function (name) {
+            return name.replace(/.* > /, '');
+          });
+          that.setStateProperty('references', _.zip(references, names));
+        });
       });
     },
+
     _determineSegments: function (props) {
       var i, l, part, path
         , that = this

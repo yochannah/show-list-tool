@@ -2,32 +2,49 @@ define(['react', './listitem'], function (React, ListItem) {
   'use strict';
 
   var ItemList = React.createClass({
-    displayName: 'ItemList',
-    render: function () {
-      try {
-        var items = this.props.items.slice(this.props.offset, this.props.offset + this.props.size).map(function (item) {
-          return ListItem({
-            className: 'list-item col-xs-4 col-sm-3 col-md-2',
-            key: item[0],
-            view: this.props.query.select,
-            item: item
-          });
-        }.bind(this));
-        return React.DOM.div(
-          {className: 'container-fluid item-list'},
-          React.DOM.div({className: 'row'}, items)
-        );
-      } catch (e) {
-        console.error(e);
-        return React.DOM.span(null, String(e));
-      }
+
+    getInitialState: function () {
+      return {selected: {}};
     },
+
+    displayName: 'ItemList',
+
+    render: function () {
+      var state = this.state
+        , props = this.props
+        , selectionHandler = this._selectionHandler;
+
+      var items = props.items.slice(props.offset, props.offset + props.size).map(function (item) {
+        return ListItem({
+          className: 'list-item col-xs-4 col-sm-3 col-md-2',
+          selected: state.selected[item[0]],
+          onChangeSelected: selectionHandler,
+          key: item[0],
+          view: props.query.select,
+          item: item
+        });
+      });
+
+      return React.DOM.div(
+        {className: 'container-fluid item-list'},
+        React.DOM.div({className: 'row'}, items)
+      );
+    },
+
     componentDidMount: function () {
       this._equaliseHeights();
     },
+
     componentDidUpdate: function () {
       this._equaliseHeights();
     },
+
+    _selectionHandler: function (id, isSelected) {
+      var state = this.state;
+      state.selected[id] = isSelected;
+      this.setState(state);
+    },
+
     _equaliseHeights: function () {
       // Make sure all items have the same height. For appearances, mostly.
       var i, l, h, lastHeight, itemNode, node = this.getDOMNode();

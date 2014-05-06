@@ -21,29 +21,25 @@ define(
         size: 24
       };
     },
+
     render: function () {
-      try {
-        return React.DOM.div(
-          {className: 'list-contents'},
-          Pager({
-            offset: this.state.offset,
-            size: this.state.size,
-            length: this.state.items.length,
-            back: goBack.bind(this),
-            next: goNext.bind(this)
-          }),
-          ItemList({
-            items: this.state.items,
-            query: this.state.query,
-            offset: this.state.offset,
-            size: this.state.size,
-            classkeys: this.props.classkeys
-          })
-        );
-      } catch (e) {
-        console.error(e);
-        return React.DOM.span(null, e);
-      }
+      return React.DOM.div(
+        {className: 'list-contents'},
+        Pager({
+          offset: this.state.offset,
+          size: this.state.size,
+          length: this.state.items.length,
+          back: goBack.bind(this),
+          next: goNext.bind(this)
+        }),
+        ItemList({
+          items: this.state.items,
+          query: this.state.query,
+          offset: this.state.offset,
+          size: this.state.size,
+          classkeys: this.props.classkeys
+        })
+      );
     },
 
     computeState: function (props) {

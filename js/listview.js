@@ -18,7 +18,9 @@ define(['react', './mixins', './listcontents', './content-table', './breadcrumbs
     mixins: [mixins.SetStateProperty, mixins.ComputableState],
 
     computeState: function (props) {
-      this.setStateProperty('path', props.list.type);
+      if (!this.state.path) {
+        this.setStateProperty('path', props.list.type);
+      }
       props.service.fetchClassKeys().then(this.setStateProperty.bind(this, 'classkeys'));
     },
 

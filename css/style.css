@@ -2,6 +2,10 @@ body {
     padding: 15px;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .nav-tabs .input-group,
 .breadcrumb .input-group {
     width: 30%;

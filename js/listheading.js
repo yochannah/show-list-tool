@@ -21,7 +21,7 @@ define(['react', './tag-adder'], function (React, TagAdder) {
         }, 
         this.props.name
       );
-      var description = React.DOM.p(null, this.props.description);
+      var description = d.p({className: 'description'}, this.props.description);
       var tags = d.div(
         {className: 'well well-sm'},
         this.props.tags.map(this._renderTag),

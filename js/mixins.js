@@ -80,9 +80,11 @@ define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
     
     function setItems (items) {
       var state = that.state;
+
       state.allItems = items;
       state.items = items.filter(rowMatchesFilter(props.filterTerm));
       state.query = query;
+
       that.setState(state);
     }
 

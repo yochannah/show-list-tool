@@ -1,5 +1,5 @@
 body {
-    padding: 15px;
+    padding: 60px 15px 15px 15px;
 }
 
 a,
@@ -25,6 +25,19 @@ a,
 }
 .item-list .thumbnail {
     min-height: 80px;
+}
+
+.show-list-tool > .nav {
+    padding: 15px 15px 0 15px;
+    background: #fff;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+
+.show-list-tool > .nav > .input-group.pull-right {
+    margin-right: 1em;
 }
 
 ul.nav-tabs > li.active > a {

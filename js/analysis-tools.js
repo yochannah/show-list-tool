@@ -68,7 +68,7 @@ define(['react',
 
       var filterBox = FilterBox({className: 'pull-right', onChange: this._handleFilterChange});
 
-      return div(null,
+      return div({className: 'show-list-tool'},
         ul({className: 'nav nav-tabs'}, tabs, filterBox), 
         div({className: 'tab-content'}, tabContent)
       );

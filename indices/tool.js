@@ -60,11 +60,20 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
         });
         React.renderComponent(listView, rootNode);
       });
+
+      return 'ok';
     });
 
-    // Inherit parent styles by importing stylesheets.
-    var oHead = document.getElementsByTagName("head")[0];
-    var arrStyleSheets = window.parent.document.getElementsByTagName("link");
-    for (var i = 0; i < arrStyleSheets.length; i++)
-        oHead.appendChild(arrStyleSheets[i].cloneNode(true));
+    chan.bind('style', function (trans, params) {
+
+      var head = document.getElementsByTagName("head")[0];
+      var link = document.createElement('link');
+
+      link.rel = "stylesheet";
+      link.href = params.stylesheet;
+
+      head.appendChild(link);
+
+    });
+
 });

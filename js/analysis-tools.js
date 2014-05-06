@@ -1,12 +1,12 @@
 define(['react',
     './listview',
-    './listheading',
     './table-tab',
+    './listdetails', 
     './search-tab',
     './enrichment-tab',
     './filter-box',
     './visualisation-tab'],
-    function (React, ListView, Heading, TableTab, SearchTab, EnrichmentTab, FilterBox, VisualisationTab) {
+    function (React, ListView, TableTab, ListDetails, SearchTab, EnrichmentTab, FilterBox, VisualisationTab) {
   'use strict';
 
   var d  = React.DOM
@@ -23,6 +23,7 @@ define(['react',
       return {
         tabs: [
           {id: 'content', text: 'Explore'},
+          {id: 'details', text: 'Details'},
           {id: 'table', text: 'Edit'},
           {id: 'search', text: 'Search'},
           {id: 'enrich', text: 'Enrich'},
@@ -48,6 +49,9 @@ define(['react',
         case 'content':
           tabContent = this._renderContentTab();
           break;
+        case 'details':
+          tabContent = this._renderDetailTab();
+          break;
         case 'table':
           tabContent = this._renderTableTab();
           break;
@@ -65,7 +69,6 @@ define(['react',
       var filterBox = FilterBox({className: 'pull-right', onChange: this._handleFilterChange});
 
       return div(null,
-        Heading(this.props.list),
         ul({className: 'nav nav-tabs'}, tabs, filterBox), 
         div({className: 'tab-content'}, tabContent)
       );
@@ -86,6 +89,13 @@ define(['react',
         service: this.props.service,
         list: this.props.list,
         filterTerm: this.state.filterTerm
+      });
+    },
+
+    _renderDetailTab: function () {
+      return ListDetails({
+        service: this.props.service,
+        list: this.props.list
       });
     },
 

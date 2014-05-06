@@ -3,6 +3,8 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
   'use strict';
 
   var d = React.DOM;
+  var isEnrichmentWidget = predicates.eq('widgetType', 'enrichment');
+  var isForList = predicates.isForList;
   var PVAL_REGEX = /^[01](\.[0-9]+)?$/;
 
   var EnrichmentTab = React.createClass({
@@ -64,7 +66,8 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
       var that = this;
 
       props.widgetPromise.then(function (widgets) {
-        var enrichmentWidgets = widgets.filter(predicates.eq('widgetType', 'enrichment'));
+        var enrichmentWidgets = widgets.filter(isEnrichmentWidget)
+                                       .filter(isForList.bind(null, props.list));
         that.setStateProperty('widgets', enrichmentWidgets);
       });
 
@@ -76,4 +79,5 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
   });
 
   return EnrichmentTab;
+
 });

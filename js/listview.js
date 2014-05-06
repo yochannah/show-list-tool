@@ -1,7 +1,9 @@
-define(['react', './mixins', './listcontents', './content-table', './breadcrumbs'],
-    function (React, mixins, Contents, ContentTable, BreadCrumbs, AnalysisTools) {
+define(['react', './local-storage', './mixins', './listcontents', './content-table', './breadcrumbs'],
+    function (React, localStorage, mixins, Contents, ContentTable, BreadCrumbs, AnalysisTools) {
 
   'use strict';
+
+  var viewKey = 'org.intermine.list-tool.list.view';
 
   var ListView = React.createClass({
 
@@ -10,7 +12,7 @@ define(['react', './mixins', './listcontents', './content-table', './breadcrumbs
     getInitialState: function () {
       return {
         path: this.props.list.type,
-        view: 'grid',
+        view: (localStorage[viewKey] || 'grid'), 
         classkeys: {}
       }
     },
@@ -33,7 +35,7 @@ define(['react', './mixins', './listcontents', './content-table', './breadcrumbs
         proceedTo: this._proceedTo,
         revertTo: this._revertTo,
         view: this.state.view,
-        onChangeView: this.setStateProperty.bind(this, 'view')
+        onChangeView: this._changeView
       });
 
       contentArgs = {
@@ -53,6 +55,11 @@ define(['react', './mixins', './listcontents', './content-table', './breadcrumbs
       }
 
       return React.DOM.div({}, controls, contents);
+    },
+
+    _changeView: function (view) {
+      localStorage[viewKey] = view;
+      this.setStateProperty('view', view);
     },
 
     _revertTo: function revertTo (path) {

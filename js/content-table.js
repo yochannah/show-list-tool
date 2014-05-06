@@ -51,6 +51,7 @@ define(['react', 'q', './mixins', './table-heading', './table-body', './pager'],
           React.DOM.table(
             {className: 'table table-striped'},
             TableHeading({
+              path: this.props.path,
               service: this.props.service,
               view: this.state.query.select,
             }),

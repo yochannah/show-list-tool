@@ -1,7 +1,3 @@
-body {
-    padding: 60px 15px 15px 15px;
-}
-
 a,
 .pointer {
     cursor: pointer;
@@ -25,6 +21,10 @@ a,
 }
 .item-list .thumbnail {
     min-height: 80px;
+}
+
+.show-list-tool {
+    padding: 60px 15px 15px 15px;
 }
 
 .show-list-tool > .nav {

@@ -72,7 +72,18 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
     },
 
     _renderCell: function (cell, i) {
-      return d.td({key: i}, cell);
+      var view, fieldName, value;
+      if (this.props.view) {
+        view = this.props.view[i + 1];
+        fieldName = view.split('.').pop().toLowerCase();
+      }
+      if (fieldName === 'url') {
+        value = d.a({href: cell}, cell);
+      } else {
+        value = cell;
+      }
+      console.log(view, fieldName);
+      return d.td({key: i}, value);
     }
 
   });

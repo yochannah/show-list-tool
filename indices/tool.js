@@ -1,7 +1,7 @@
 // main.js
 var loc = '../';
 require.config({
-    baseUrl: loc + 'js',
+    baseUrl: 'js',
     paths: {
         jquery: loc + 'bower_components/jquery/dist/jquery',
         q: loc + 'bower_components/q/q',

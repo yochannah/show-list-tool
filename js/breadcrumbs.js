@@ -53,17 +53,19 @@ define(['react', 'q', 'underscore', './mixins', './dropdown', './filter-box'],
               seg.segment));
         }
       }.bind(this));
-      
-      return ol(
-          {className: 'breadcrumb'},
-          viewChooser,
-          segments,
-          li({}, Dropdown({
-            mainTitle: "Proceed to",
-            links: this.state.references.map(function (ref, i) {
-              return a({onClick: this.props.proceedTo.bind(null, ref[0])}, ref[1]);
-            }.bind(this))
-          })));
+
+      if (this.state.references.length) {
+        var dropdown = li({}, Dropdown({
+          mainTitle: "Proceed to",
+          links: this.state.references.map(function (ref, i) {
+            return a({onClick: this.props.proceedTo.bind(null, ref[0])}, ref[1]);
+          }.bind(this))
+        }));
+        return ol({className: 'breadcrumb'}, viewChooser, segments, dropdown);
+      } else {
+        return ol({className: 'breadcrumb'}, viewChooser, segments);
+      }
+
     },
 
     computeState: function (nextProps) {

@@ -15,6 +15,16 @@ a,
     max-width: 10em;
 }
 
+.dropdown-menu-group {
+    display: inline-block;
+    float: left;
+    margin-right: 1em;
+    padding: 0.4em;
+}
+
+.dropdown-menu-group .dropdown-menu {
+}
+
 .nav-tabs .input-group,
 .breadcrumb .input-group {
     width: 30%;

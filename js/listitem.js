@@ -1,4 +1,4 @@
-define(['react', 'underscore'], function (React, _) {
+define(['react', 'underscore', './grid-formatters'], function (React, _, formatters) {
   'use strict';
 
   var d      = React.DOM
@@ -13,17 +13,31 @@ define(['react', 'underscore'], function (React, _) {
     displayName: 'ListItem',
 
     render: function () {
+      try {
       var item = this.props.item;
       var view = this.props.view;
+      var content, formatter;
+      if (formatter = formatters[this.props.type]) {
+        content = formatter(this.props);
+      } else {
+        content = [
+          h5({key: 'header'}, strong({}, idents(item, view).join(' '))),
+          p({key: 'text'}, line2(item, view)),
+          p({key: 'note'}, em({}, subtext(item, view)))
+        ];
+      }
+
       var iconClass = this.props.selected ? 'fa-star' : 'fa-star-o';
       return div(
         {className: this.props.className},
         div(
           {onClick: this._select, className: 'thumbnail'},
           d.i({className: 'pointer pull-right fa ' + iconClass}),
-          h5(null, strong({}, idents(item, view).join(' '))),
-          p(null, line2(item, view)),
-          p(null, em({}, subtext(item, view)))));
+          content));
+      } catch (e) {
+        console.error(e);
+        return d.div({className: 'alert alert-danger'}, String(e));
+      }
     },
 
     _select: function () {

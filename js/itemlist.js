@@ -10,6 +10,7 @@ define(['react', './listitem'], function (React, ListItem) {
     displayName: 'ItemList',
 
     render: function () {
+      try {
       var state = this.state
         , props = this.props
         , selectionHandler = props.onItemSelected;
@@ -19,6 +20,7 @@ define(['react', './listitem'], function (React, ListItem) {
           className: 'list-item col-xs-4 col-sm-3 col-md-2',
           selected: (props.selected.all || props.selected[item[0]]),
           onChangeSelected: selectionHandler,
+          type: props.type,
           key: item[0],
           view: props.query.select,
           item: item
@@ -29,6 +31,10 @@ define(['react', './listitem'], function (React, ListItem) {
         {className: 'container-fluid item-list'},
         React.DOM.div({className: 'row'}, items)
       );
+      } catch (e) {
+        console.error(e);
+        return React.DOM.div({className: 'alert alert-danger'}, String(e));
+      }
     },
 
     componentDidMount: function () {

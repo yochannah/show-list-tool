@@ -21,6 +21,7 @@ define(['react', './listitem'], function (React, ListItem) {
           selected: (props.selected.all || props.selected[item[0]]),
           onChangeSelected: selectionHandler,
           type: props.type,
+          onRender: this._equaliseHeights,
           key: item[0],
           view: props.query.select,
           item: item
@@ -53,6 +54,7 @@ define(['react', './listitem'], function (React, ListItem) {
       var different = false;
       for (i = 0, l = itemNodes.length; i < l; i++) {
         itemNode = itemNodes[i];
+        delete itemNode.style.height;
         h = itemNode.getBoundingClientRect().height;
         maxHeight = Math.max(maxHeight, h);
         if (lastHeight) {

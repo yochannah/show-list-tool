@@ -40,6 +40,16 @@ define(['react', 'underscore', './grid-formatters'], function (React, _, formatt
       }
     },
 
+    componentDidMount: function () {
+      if (this.props.onRender)
+        this.props.onRender();
+    },
+
+    componentDidUpdate: function () {
+      if (this.props.onRender)
+        this.props.onRender();
+    },
+
     _select: function () {
       this.props.onChangeSelected(this.props.item[0], !this.props.selected);
     }

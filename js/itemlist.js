@@ -13,7 +13,8 @@ define(['react', './listitem'], function (React, ListItem) {
       try {
       var state = this.state
         , props = this.props
-        , selectionHandler = props.onItemSelected;
+        , selectionHandler = props.onItemSelected
+        , onRender = this._equaliseHeights;
 
       var items = props.items.slice(props.offset, props.offset + props.size).map(function (item) {
         return ListItem({
@@ -21,7 +22,7 @@ define(['react', './listitem'], function (React, ListItem) {
           selected: (props.selected.all || props.selected[item[0]]),
           onChangeSelected: selectionHandler,
           type: props.type,
-          onRender: this._equaliseHeights,
+          onRender: onRender,
           key: item[0],
           view: props.query.select,
           item: item

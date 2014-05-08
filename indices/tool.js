@@ -60,15 +60,16 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
           onSelectedItems: reportItems
         });
         React.renderComponent(listView, rootNode);
-      });
 
-      chan.notify({
-        method: 'has-list',
-        params: {
-          root: service.root,
-          name: list.name,
-          type: list.type
-        }
+        chan.notify({
+          method: 'has-list',
+          params: {
+            root: service.root,
+            name: list.name,
+            type: list.type
+          }
+        });
+
       });
 
       return 'ok';

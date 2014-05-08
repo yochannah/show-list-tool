@@ -88,7 +88,17 @@ define(['react',
       return ListView({
         service: this.props.service,
         list: this.props.list,
-        filterTerm: this.state.filterTerm
+        filterTerm: this.state.filterTerm,
+        onSelectedItems: this.props.onSelectedItems,
+        onSelectedList: this._reportListSelection
+      });
+    },
+
+    _reportListSelection: function (list) {
+      var onSelected = this.props.onSelectedItems;
+      list.contents().then(function (objs) {
+        var ids = objs.map(function (o) { return o.objectId; });
+        onSelected(list.type, ids);
       });
     },
 

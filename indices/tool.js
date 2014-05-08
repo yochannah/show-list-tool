@@ -56,7 +56,8 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       service.fetchList(listName).then(function showList (list) {
         var listView = new View({
           service: service,
-          list: list
+          list: list,
+          onSelectedItems: reportItems
         });
         React.renderComponent(listView, rootNode);
       });
@@ -75,5 +76,16 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       head.appendChild(link);
 
     });
+
+    function reportItems (type, ids) {
+      chan.notify({
+        method: 'has-items',
+        params: {
+          noun: type, // String - eg: "Protein"
+          categories: ['selected'],
+          ids: ids  // Array[Int] - eg: [123, 456, 789]
+        }
+      });
+    }
 
 });

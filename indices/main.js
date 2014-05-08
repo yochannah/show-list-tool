@@ -47,9 +47,14 @@ require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imj
     service.fetchList(listName).then(function showList (list) {
       var listView = new View({
         service: service,
-        list: list
+        list: list,
+        onSelectedItems: reportItems
       });
       React.renderComponent(listView, rootNode);
     });
+
+    function reportItems (type, ids) {
+      console.log("The user selected " + ids.length + " " + type + "s");
+    }
 
 });

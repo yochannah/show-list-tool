@@ -24,7 +24,6 @@ define(['react',
         tabs: [
           {id: 'content', text: 'Explore'},
           {id: 'details', text: 'Details'},
-          {id: 'table', text: 'Edit'},
           {id: 'search', text: 'Search'},
           {id: 'enrich', text: 'Enrich'},
           {id: 'graphs', text: 'Visualise'}
@@ -37,7 +36,11 @@ define(['react',
     },
 
     render: function () {
-      var tabs = this.state.tabs.map(function (tab) {
+      var tabConf = this.state.tabs;
+      if (this.props.list.authorized) {
+        tabConf.push({id: 'table', text: 'Edit'});
+      }
+      var tabs = tabConf.map(function (tab) {
         return li(
           {key: tab.id, className: this.state.currentTab === tab.id ? 'active' : ''},
           a(
@@ -88,7 +91,17 @@ define(['react',
       return ListView({
         service: this.props.service,
         list: this.props.list,
-        filterTerm: this.state.filterTerm
+        filterTerm: this.state.filterTerm,
+        onSelectedItems: this.props.onSelectedItems,
+        onSelectedList: this._reportListSelection
+      });
+    },
+
+    _reportListSelection: function (list) {
+      var onSelected = this.props.onSelectedItems;
+      list.contents().then(function (objs) {
+        var ids = objs.map(function (o) { return o.objectId; });
+        onSelected(list.type, list.type, ids);
       });
     },
 
@@ -112,7 +125,8 @@ define(['react',
         service: this.props.service,
         list: this.props.list,
         templatePromise: this.state.templatePromise,
-        filterTerm: this.state.filterTerm
+        filterTerm: this.state.filterTerm,
+        execute: this.props.onNextStep
       });
     },
     _renderEnrichmentTab: function () {

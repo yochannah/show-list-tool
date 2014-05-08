@@ -14,6 +14,9 @@ chan.call({
   },
   success: function () {
     console.log("Tool initialised");
+  },
+  error: function (e) {
+    console.log("initialisation failed because: " + e);
   }
 });
 
@@ -26,7 +29,14 @@ for (i = 0, l = links.length; i < l; i++) {
     params: { stylesheet: links[i].href },
     success: function () {
       console.log("Applied stylesheet");
+    },
+    error: function (e) {
+      console.log(e);
     }
   });
 }
+
+chan.bind('has-list', function (trans, data) {
+  console.log("Woot - list exists");
+});
 

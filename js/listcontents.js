@@ -37,6 +37,7 @@ define(
         ItemList({
           items: this.state.items,
           query: this.state.query,
+          type: this.state.type,
           offset: this.state.offset,
           size: this.state.size,
           selected: this.props.selected,
@@ -59,6 +60,13 @@ define(
 
       var modelP = props.service.fetchModel();
       var summaryFieldsP = props.service.fetchSummaryFields();
+
+      modelP.then(function (model) {
+        var path = model.makePath(props.path);
+        var state = that.state;
+        state.type = path.getType().name;
+        that.setState(state);
+      });
 
       Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, props));
     }

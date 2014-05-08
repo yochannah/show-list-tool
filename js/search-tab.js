@@ -31,7 +31,8 @@ define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-l
         key: template.name,
         filterTerm: this.props.filterTerm,
         service: this.props.service,
-        list: this.props.list
+        list: this.props.list,
+        execute: this.props.execute
       });
 
     },

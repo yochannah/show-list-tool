@@ -30,7 +30,10 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins', './fo
           {className: 'pull-right badge'},
           (this.state.count != null) ? formatNumber(this.state.count) : (this.state.error || "counting...")),
         d.a(
-          {className: (this.state.count === 0 ? 'disabled' : ''), onClick: this._handleClick},
+          {
+            className: (this.state.count === 0 && 'disabled'),
+            onClick: this._handleClick
+          },
           this.state.title),
         d.p({className: 'description'}, d.small(null, this._renderDescription())));
     },
@@ -94,7 +97,15 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins', './fo
     },
 
     _handleClick: function () {
-      this.props.onChoose(this.props.template);
+      this.props.execute({
+        title: "Ran template " + this.props.template.title,
+        tool: "/tools/show-table",
+        data: {
+          url: this.props.service.root,
+          token: this.props.service.token,
+          query: this.state.query
+        }
+      });
     },
 
     // Required by ComputableState

@@ -57,7 +57,8 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
         var listView = new View({
           service: service,
           list: list,
-          onSelectedItems: reportItems
+          onSelectedItems: reportItems,
+          onNextStep: nextStep
         });
         React.renderComponent(listView, rootNode);
 
@@ -86,6 +87,13 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       head.appendChild(link);
 
     });
+
+    function nextStep (data) {
+      chan.notify({
+        method: 'next-step',
+        params: data
+      });
+    }
 
     function reportItems (path, type, ids) {
       chan.notify({

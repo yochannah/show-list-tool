@@ -101,7 +101,7 @@ define(['react',
       var onSelected = this.props.onSelectedItems;
       list.contents().then(function (objs) {
         var ids = objs.map(function (o) { return o.objectId; });
-        onSelected(list.type, ids);
+        onSelected(list.type, list.type, ids);
       });
     },
 

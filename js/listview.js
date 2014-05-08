@@ -112,11 +112,9 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
 
   function reportPathSelection (service, list, path, selected, fn) {
     service.fetchModel().then(function (model) {
-      var query, type = model.makePath(path).getType().name;
+      var type = model.makePath(path).getType().name;
 
       if (selected.all) {
-        query = 
-
         queryValues(service, {
           select: [path + ".id"],
           where: [{

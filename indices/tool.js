@@ -77,10 +77,11 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
 
     });
 
-    function reportItems (type, ids) {
+    function reportItems (path, type, ids) {
       chan.notify({
         method: 'has-items',
         params: {
+          key: path,   // String - any identifier.
           noun: type, // String - eg: "Protein"
           categories: ['selected'],
           ids: ids  // Array[Int] - eg: [123, 456, 789]

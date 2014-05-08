@@ -53,8 +53,8 @@ require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imj
       React.renderComponent(listView, rootNode);
     });
 
-    function reportItems (type, ids) {
-      console.log("The user selected " + ids.length + " " + type + "s");
+    function reportItems (path, type, ids) {
+      console.log("The user selected " + ids.length + " " + type + "s from " + path);
     }
 
 });

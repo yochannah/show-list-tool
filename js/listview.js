@@ -99,7 +99,7 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
           if (selections.all) {
             props.onSelectedList(list);
           } else {
-            props.onSelectedItems(path, selectedIds(selections));
+            props.onSelectedItems(path, path, selectedIds(selections));
           }
         } else {
           reportPathSelection(props.service, list, path, selections, props.onSelectedItems);
@@ -125,10 +125,10 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
             value: list.name
           }]
         }).then(function (ids) {
-          fn(type, ids);
+          fn(path, type, ids);
         });
       } else {
-        fn(type, selectedIds(selected));
+        fn(path, type, selectedIds(selected));
       }
     });
   }

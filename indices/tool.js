@@ -58,7 +58,7 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
           service: service,
           list: list,
           onSelectedItems: reportItems,
-          executeQuery: executeQuery
+          executeQuery: executeQuery.bind(null, serviceArgs.root)
         });
         React.renderComponent(listView, rootNode);
 
@@ -88,13 +88,13 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
 
     });
 
-    function executeQuery (title, query) {
+    function executeQuery (root, title, query) {
       nextStep({
         title: 'ran ' + title,
         tool: 'show-table',
         data: {
           query: query,
-          service: { root: params.service.root }
+          service: { root: root }
         }
       });
     }

@@ -97,15 +97,7 @@ define(['react', 'imjs', 'q', './query-cache', './predicates', './mixins', './fo
     },
 
     _handleClick: function () {
-      this.props.execute({
-        title: "Ran template " + this.props.template.title,
-        tool: "/tools/show-table",
-        data: {
-          url: this.props.service.root,
-          token: this.props.service.token,
-          query: this.state.query
-        }
-      });
+      this.props.execute(this.props.template.title, this.state.query);
     },
 
     // Required by ComputableState

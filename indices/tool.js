@@ -58,7 +58,7 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
           service: service,
           list: list,
           onSelectedItems: reportItems,
-          onNextStep: nextStep
+          executeQuery: executeQuery
         });
         React.renderComponent(listView, rootNode);
 
@@ -87,6 +87,17 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       head.appendChild(link);
 
     });
+
+    function executeQuery (title, query) {
+      nextStep({
+        title: 'ran ' + title,
+        tool: 'show-table',
+        data: {
+          query: query,
+          service: { root: params.service.root }
+        }
+      });
+    }
 
     function nextStep (data) {
       chan.notify({

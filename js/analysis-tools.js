@@ -126,7 +126,7 @@ define(['react',
         list: this.props.list,
         templatePromise: this.state.templatePromise,
         filterTerm: this.state.filterTerm,
-        execute: this.props.onNextStep
+        execute: this.props.executeQuery
       });
     },
     _renderEnrichmentTab: function () {

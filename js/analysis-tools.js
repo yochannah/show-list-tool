@@ -36,7 +36,7 @@ define(['react',
     },
 
     render: function () {
-      var tabConf = this.state.tabs;
+      var tabConf = this.state.tabs.slice();
       if (this.props.list.authorized) {
         tabConf.push({id: 'table', text: 'Edit'});
       }

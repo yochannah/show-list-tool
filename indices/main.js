@@ -49,13 +49,17 @@ require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imj
         service: service,
         list: list,
         onSelectedItems: reportItems,
-        onNextStep: nextStep
+        executeQuery: executeQuery
       });
       React.renderComponent(listView, rootNode);
     });
 
     function reportItems (path, type, ids) {
       console.log("The user selected " + ids.length + " " + type + "s from " + path);
+    }
+
+    function executeQuery (title, query) {
+      console.log("Runnning " + title, query);
     }
 
     function nextStep (data) {

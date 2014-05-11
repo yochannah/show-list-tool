@@ -45,11 +45,11 @@ define(['react', 'q', 'underscore', './local-storage', './mixins', './predicates
         what: 'enrichment',
         data: {
           request: {
-            widget: name,
+            enrichment: name,
             list: this.props.list.name,
             maxp: this.state.maxp,
             correction: this.state.correction,
-            backgroundPopulation: this.state.backgroundPopulation
+            background: this.state.backgroundPopulation
           }
         }
       });

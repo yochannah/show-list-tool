@@ -134,7 +134,8 @@ define(['react',
         service: this.props.service,
         list: this.props.list,
         widgetPromise: this.state.widgetPromise,
-        filterTerm: this.state.filterTerm
+        filterTerm: this.state.filterTerm,
+        wants: this._wants
       });
     },
     _renderVisualisationTab: function () {
@@ -149,6 +150,12 @@ define(['react',
       var state = this.state;
       state.currentTab = ident;
       this.setState(state);
+    },
+
+    _wants: function (message) {
+      // add information about the service.
+      message.data.service = {root: this.props.service.root};
+      this.props.wants(message);
     }
   });
 

@@ -32,12 +32,27 @@ define(['react', 'q', 'underscore', './local-storage', './mixins', './predicates
         this.state
       ));
       var widgets = EnrichmentWidgets(_.extend(
-        {filterTerm: this.props.filterTerm},
+        {filterTerm: this.props.filterTerm, wantsEnrichment: this._wantsEnrichment},
         this.props,
         this.state
       ));
 
       return d.div(null, controls, widgets);
+    },
+
+    _wantsEnrichment: function (name) {
+      this.props.wants({
+        what: 'enrichment',
+        data: {
+          request: {
+            widget: name,
+            list: this.props.list.name,
+            maxp: this.state.maxp,
+            correction: this.state.correction,
+            backgroundPopulation: this.state.backgroundPopulation
+          }
+        }
+      });
     },
 
     _validators: {

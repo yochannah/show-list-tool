@@ -49,7 +49,8 @@ require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imj
         service: service,
         list: list,
         onSelectedItems: reportItems,
-        executeQuery: executeQuery
+        executeQuery: executeQuery,
+        wants: wants
       });
       React.renderComponent(listView, rootNode);
     });
@@ -60,6 +61,10 @@ require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imj
 
     function executeQuery (title, query) {
       console.log("Runnning " + title, query);
+    }
+
+    function wants (message) {
+      console.log("WANT", message);
     }
 
     function nextStep (data) {

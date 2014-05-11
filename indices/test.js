@@ -40,3 +40,7 @@ chan.bind('has-list', function (trans, data) {
   console.log("Woot - list exists");
 });
 
+chan.bind('wants', function (trans, params) {
+  console.log('WANT', params.what, params.data);
+});
+

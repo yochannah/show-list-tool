@@ -58,7 +58,8 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
           service: service,
           list: list,
           onSelectedItems: reportItems,
-          executeQuery: executeQuery.bind(null, serviceArgs.root)
+          executeQuery: executeQuery.bind(null, serviceArgs.root),
+          wants: wants
         });
         React.renderComponent(listView, rootNode);
 
@@ -87,6 +88,13 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       head.appendChild(link);
 
     });
+
+    function wants (message) {
+      chan.notify({
+        method: 'wants',
+        params: message
+      });
+    }
 
     function executeQuery (root, title, query) {
       nextStep({

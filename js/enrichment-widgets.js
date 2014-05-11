@@ -38,9 +38,11 @@ define(['react', 'underscore', './mixins', './enrichment-widget-line'], function
       return EnrichmentWidgetLine({
         widget: widget,
         key: widget.name,
-        enriching: enriching
+        enriching: enriching,
+        wantsEnrichment: this.props.wantsEnrichment
       });
     }
+
   });
 
   return EnrichmentWidgets;

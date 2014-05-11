@@ -42,7 +42,7 @@ define(['react', './mixins', './formatting'], function (React, mixins, formattin
     },
 
     _handleClick: function () {
-      //TODO
+      this.props.wantsEnrichment(this.props.widget.name);
     },
 
     computeState: function (props) {

@@ -1,11 +1,12 @@
-define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-controls', './enrichment-widgets'],
-    function (React, Q, _, mixins, predicates, EnrichmentControls, EnrichmentWidgets) {
+define(['react', 'q', 'underscore', './local-storage', './mixins', './predicates', './enrichment-controls', './enrichment-widgets'],
+    function (React, Q, _, localStorage, mixins, predicates, EnrichmentControls, EnrichmentWidgets) {
   'use strict';
 
   var d = React.DOM;
   var isEnrichmentWidget = predicates.eq('widgetType', 'enrichment');
   var isForList = predicates.isForList;
   var PVAL_REGEX = /^[01](\.[0-9]+)?$/;
+  var correctionKey = "org.intermine.list-tool.enrichment.correction";
 
   var EnrichmentTab = React.createClass({
 
@@ -18,7 +19,7 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
         widgets: [],
         invalid: {},
         listPromise: Q([]),
-        correction: 'Benjamini-Hochberg',
+        correction: (localStorage[correctionKey] || 'Benjamini Hochberg'),
         maxp: 0.05,
         backgroundPopulation: null
       };
@@ -58,6 +59,10 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './enrichment-co
 
       state.invalid[prop] = !valid;
       if (valid) state[prop] = value;
+
+      if (prop === 'correction') {
+        localStorage[correctionKey] = value;
+      }
 
       this.setState(state);
     },

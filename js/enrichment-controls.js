@@ -14,7 +14,7 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
     getInitialState: function () {
       return {
         maxp: this.props.maxp,
-        correctionAlgorithms: ['Holm-Bonferroni', 'Bonferroni', 'Benjamini-Hochberg'],
+        correctionAlgorithms: ['Holm-Bonferroni', 'Bonferroni', 'Benjamini Hochberg'],
         backgrounds: []
       };
     },

@@ -3,8 +3,8 @@ define(['react',
     'underscore',
     './mixins',
     './predicates',
-    './enrichment-widgets'],
-    function (React, Q, _, mixins, predicates, EnrichmentWidgets) {
+    './sorry'],
+    function (React, Q, _, mixins, predicates, sorry) {
   'use strict';
 
   var d = React.DOM;
@@ -27,11 +27,18 @@ define(['react',
     },
 
     render: function render () {
-      return d.ul(
-        {className: 'list-group'},
-        this.state.widgets
-                  .filter(this.matchesFilter)
-                  .map(this._renderWidget));
+      var widgets = this.state
+                        .widgets.filter(this.matchesFilter)
+                        .map(this._renderWidget);
+
+
+      if (widgets.length) {
+        return d.ul({className: 'list-group'}, widgets);
+      } else if (this.state.widgets.length) {
+        return sorry("no visualization tools matched your filter terms.");
+      } else {
+        return sorry("no visualization tools calculations found");
+      }
     },
 
     _renderWidget: function (widget, i) {

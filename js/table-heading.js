@@ -16,21 +16,20 @@ define(['react', 'q', './strings', './mixins'],
       }
     },
 
+    getDefaultProps: function () {
+      return {
+        onSort: function () {}
+      };
+    },
+
     computeState: function (props) {
-      var that = this;
+      var setHeaders = this.setStateProperty.bind(this, 'headers')
+        // the first view is the id. Don't show that.
+        , columns = props.view.slice(1);
 
       props.service.fetchModel().then(function (model) {
-        // the first view is the id. Don't show that.
-        var namings = that.props.view.slice(1).map(function (column) {
-          return model.makePath(column).getDisplayName();
-        });
-        Q.all(namings)
-         .then(function (names) {
-           var lcp = strings.longestCommonPrefix(names);
-           return names.map(function (name) {
-             return name.slice(lcp.length);
-           });
-         }).then(that.setStateProperty.bind(that, 'headers'));
+        var namings = columns.map(bename.bind(null, model));
+        Q.all(namings).then(trimStart).then(setHeaders);
       });
 
     },
@@ -61,11 +60,38 @@ define(['react', 'q', './strings', './mixins'],
     },
 
     _renderHeader: function (columnName, i) {
-      return d.th({key: i}, columnName);
+      var props = this.props
+        , nextIsAsc = props.sortColumn !== i || !props.sortASC;
+      return d.th(
+          {
+            key: i,
+            className: 'sortable',
+            onClick: props.onSort.bind(null, i, nextIsAsc)
+          },
+          d.i(
+            {className: 'fa fa-sort' + this._sortClass(i)}),
+          ' ',
+          columnName);
+    },
+
+    _sortClass: function (columnIndex) {
+      if (columnIndex !== this.props.sortColumn) return '';
+      return this.props.sortASC ? '-asc' : '-desc';
     }
 
   });
 
   return TableHeading;
+
+  function bename (model, path) {
+    return model.makePath(path).getDisplayName();
+  }
+
+  function trimStart (names) {
+    var lcp = strings.longestCommonPrefix(names);
+    return names.map(function (name) {
+      return name.slice(lcp.length);
+    });
+  }
 
 });

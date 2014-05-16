@@ -115,6 +115,9 @@ ul.nav-tabs > li.active > a {
 .template-line .description .match {
     background: #555;
     color: #eee;
+    padding: 2px;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .fade-toggle-enter {

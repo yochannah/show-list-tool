@@ -1,5 +1,12 @@
-define(['react', './listitem'], function (React, ListItem) {
+define([
+    'react',
+    './listitem',
+    './sorry',
+    './loading'
+    ], function (React, ListItem, sorry, loading) {
   'use strict';
+
+  var d = React.DOM;
 
   var ItemList = React.createClass({
 
@@ -16,7 +23,7 @@ define(['react', './listitem'], function (React, ListItem) {
         , selectionHandler = props.onItemSelected
         , onRender = this._equaliseHeights;
 
-      var items = props.items.slice(props.offset, props.offset + props.size).map(function (item) {
+      var items = (props.items || []).slice(props.offset, props.offset + props.size).map(function (item) {
         return ListItem({
           className: 'list-item col-xs-4 col-sm-3 col-md-2',
           selected: (props.selected.all || props.selected[item[0]]),
@@ -28,11 +35,17 @@ define(['react', './listitem'], function (React, ListItem) {
           item: item
         });
       });
+      
+      if (items.length) {
+        return d.div(
+          {className: 'container-fluid item-list'},
+          d.div({className: 'row'}, items));
+      } else if (props.hasRun && props.items) {
+        return sorry("no items matched your filter terms");
+      } else {
+        return loading();
+      }
 
-      return React.DOM.div(
-        {className: 'container-fluid item-list'},
-        React.DOM.div({className: 'row'}, items)
-      );
       } catch (e) {
         console.error(e);
         return React.DOM.div({className: 'alert alert-danger'}, String(e));

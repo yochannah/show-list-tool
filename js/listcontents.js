@@ -1,5 +1,12 @@
-define(
-    ['react', 'q', 'underscore', 'imjs', './mixins', './itemlist', './pager', './query-cache'],
+define([
+    'react',
+    'q',
+    'underscore',
+    'imjs',
+    './mixins',
+    './itemlist',
+    './pager',
+    './query-cache'],
     function (React, Q, _, imjs, mixins, ItemList, Pager, Caches) {
 
   'use strict';
@@ -14,8 +21,7 @@ define(
 
     getInitialState: function () {
       return {
-        items: [],
-        allItems: [],
+        hasRun: false,
         query: {select: []},
         offset: 0,
         size: 24
@@ -28,13 +34,14 @@ define(
         Pager({
           offset: this.state.offset,
           size: this.state.size,
-          length: this.state.items.length,
+          length: (this.state.items && this.state.items.length),
           selected: this.props.selected,
           onAllSelected: this._onAllSelected,
           back: goBack.bind(this),
           next: goNext.bind(this)
         }),
         ItemList({
+          hasRun: this.state.hasRun,
           items: this.state.items,
           query: this.state.query,
           type: this.state.type,
@@ -55,7 +62,9 @@ define(
       var that = this;
       var state = this.state;
       state.offset = 0;
-      state.items = state.allItems.filter(this.rowMatchesFilter(props.filterTerm));
+      if (state.allItems) {
+        state.items = state.allItems.filter(this.rowMatchesFilter(props.filterTerm));
+      }
       this.setState(state);
 
       var modelP = props.service.fetchModel();
@@ -68,14 +77,21 @@ define(
         that.setState(state);
       });
 
-      Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, props));
+      Q.spread([modelP, summaryFieldsP],
+        _.compose(this._hasRun, this.buildQuery.bind(this, props)));
+    },
+
+    _hasRun: function () {
+      var state = this.state;
+      if (!state.hasRun) {
+        state.hasRun = true;
+        this.setState(state);
+      }
     }
 
   });
 
   return ListContents;
-
-
 
   function goBack () {
     var state = this.state;
@@ -86,15 +102,10 @@ define(
   function goNext () {
     var state = this.state;
     var nextOffset = state.offset + state.size;
-    if (nextOffset < state.items.length) {
+    if (state.items && nextOffset < state.items.length) {
       state.offset = nextOffset;
       this.setState(state);
     }
   }
 
-  function fillItems (items) {
-    var state = this.state;
-    state.items = items;
-    this.setState(state);
-  }
 });

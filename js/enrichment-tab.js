@@ -16,7 +16,6 @@ define(['react', 'q', 'underscore', './local-storage', './mixins', './predicates
 
     getInitialState: function init () {
       return {
-        widgets: [],
         invalid: {},
         listPromise: Q([]),
         correction: (localStorage[correctionKey] || 'Benjamini Hochberg'),

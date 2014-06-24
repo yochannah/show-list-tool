@@ -1,5 +1,13 @@
-define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-line'],
-    function (React, _, imjs, predicates, mixins, TemplateLine) {
+define([
+    'react',
+    'underscore',
+    'imjs',
+    './predicates',
+    './mixins',
+    './template-line',
+    './sorry',
+    './loading'],
+    function (React, _, imjs, predicates, mixins, TemplateLine, sorry, loading) {
   'use strict';
 
   var isEditable = predicates.isEditable;
@@ -11,17 +19,24 @@ define(['react', 'underscore', 'imjs', './predicates', './mixins', './template-l
     mixins: [mixins.ComputableState, mixins.Filtered],
 
     getInitialState: function () {
-      return { templates: [] };
+      return { templates: null};
     },
 
     render: function () {
-      var templates = this.state.templates
+      var templates = (this.state.templates || [])
                                 .filter(this.matchesFilter)
                                 .map(this._renderTemplate);
-      return d.ul(
-        {className: 'list-group'},
-        templates
-      );
+      if (templates.length) {
+        return d.ul({className: 'list-group'}, templates);
+      } else if (this.state.templates) {
+        if (this.state.templates.length) {
+          return sorry("no templates matched your filter terms");
+        } else {
+          return sorry("we couldn't find any suitable templates for this list.");
+        }
+      } else {
+        return loading();
+      }
     },
 
     _renderTemplate: function (template, i) {

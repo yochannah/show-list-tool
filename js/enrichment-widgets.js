@@ -1,4 +1,12 @@
-define(['react', 'underscore', './mixins', './enrichment-widget-line'], function (React, _, mixins, EnrichmentWidgetLine) {
+define([
+    'react',
+    'underscore',
+    './mixins',
+    './enrichment-widget-line',
+    './sorry',
+    './loading'],
+    function (React, _, mixins, EnrichmentWidgetLine, sorry, loading) {
+
   'use strict';
 
   var d = React.DOM;
@@ -10,11 +18,21 @@ define(['react', 'underscore', './mixins', './enrichment-widget-line'], function
     mixins: [mixins.Filtered],
 
     render: function () {
-      return d.ul(
-        {className: 'list-group'},
-        this.props.widgets
-                  .filter(this.matchesFilter)
-                  .map(this._renderWidget));
+      var widgets = (this.props.widgets || [])
+                        .filter(this.matchesFilter)
+                        .map(this._renderWidget);
+
+      if (widgets.length) {
+        return d.ul({className: 'list-group'}, widgets);
+      } else if (this.props.widgets) {
+        if (this.props.widgets.length) {
+          return sorry("no enrichment calculations matched your filter terms.");
+        } else {
+          return sorry("no suitable enrichment calculations found");
+        }
+      } else {
+        return loading();
+      }
     },
 
     _calculateEnrichment: _.memoize(function (list, args) {

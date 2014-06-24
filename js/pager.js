@@ -29,10 +29,12 @@ define(['react', 'underscore'], function (React, _) {
         li({className: 'previous' + (props.offset ? '' : ' disabled')}, a({onClick: props.back}, "Back")),
         li(null,
           span(
-            null,
+            {
+              className: 'clickable',
+              onClick: this._toggleSelectAll
+            },
             React.DOM.i({
               title: selectedTitle,
-              onClick: this._toggleSelectAll,
               className: 'pointer pull-right fa ' + selectedIcon
             }),
             span({className: 'summary'}, summary))),

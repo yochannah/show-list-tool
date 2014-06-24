@@ -32,17 +32,31 @@ define(['react', 'q', 'imjs', './predicates', './query-cache', './mixins'],
       function setRows (rows) {
         var filtered = rows.filter(that.rowMatchesFilter(props.filterTerm));
         var state = that.state;
-        state.allRows = rows;
-        state.rows = filtered;
+        state.rows = rows;
+
         that.setState(state);
         that.props.onCount(filtered.length);
       }
 
     },
 
+    getRows: function () {
+      var props = this.props
+        , all = (props.rows || this.state.rows)
+        , filtered = all.filter(this.rowMatchesFilter(props.filterTerm));
+
+      filtered.sort(function (a, b) {
+        var idx = props.sortColumn + 1
+          , cmp = (a[idx] < b[idx]) ? -1 : (a[idx] > b[idx]) ? 1 : 0;
+        return cmp * (props.sortASC ? 1 : -1);
+      });
+
+      return filtered;
+    },
+
     render: function () {
       try {
-      var rows = (this.props.rows || this.state.rows)
+      var rows = this.getRows()
         , end = Math.min(rows.length, this.props.offset + this.props.size);
 
       return d.tbody(

@@ -47,7 +47,7 @@ define([
     },
     
     render: function () {
-      var contents;
+      var content;
       if (this.state.items && this.state.items.length) {
         content = React.DOM.table(
             {className: 'table table-striped'},

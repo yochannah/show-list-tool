@@ -5,9 +5,21 @@ var chan = Channel.build({
 });
 
 chan.call({
+  method: 'configure',
+  params: {
+    activeTabs: ['enrich']
+  },
+  success: function () {
+    console.log("Tool configured");
+  },
+  error: function (e) {
+    console.log("configuration failed because: " + e);
+  }
+});
+
+chan.call({
   method: 'init',
   params: {
-    activeTabs: ['enrich'],
     listName: 'PL FlyTF_putativeTFs',
     service: {
       root: "http://www.flymine.org/query"

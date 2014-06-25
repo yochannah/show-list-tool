@@ -50,12 +50,14 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
 
       var listName = params.listName;
       var serviceArgs = params.service;
+      var activeTabs = params.activeTabs;
       var rootNode = document.body;
       var service = imjs.Service.connect(serviceArgs);
 
       service.fetchList(listName).then(function showList (list) {
         var listView = new View({
           service: service,
+          activeTabs: activeTabs,
           list: list,
           onSelectedItems: reportItems,
           executeQuery: executeQuery.bind(null, serviceArgs.root),

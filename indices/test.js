@@ -7,6 +7,7 @@ var chan = Channel.build({
 chan.call({
   method: 'init',
   params: {
+    activeTabs: ['enrich'],
     listName: 'PL FlyTF_putativeTFs',
     service: {
       root: "http://www.flymine.org/query"

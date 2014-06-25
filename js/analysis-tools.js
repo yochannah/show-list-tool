@@ -7,6 +7,7 @@ define(['react',
     './filter-box',
     './visualisation-tab'],
     function (React, ListView, TableTab, ListDetails, SearchTab, EnrichmentTab, FilterBox, VisualisationTab) {
+
   'use strict';
 
   var d  = React.DOM
@@ -20,14 +21,22 @@ define(['react',
     displayName: 'AnalysisTools',
 
     getInitialState: function () {
+      var activeTabs = this.props.activeTabs;
+      var tabs = [
+        {id: 'content', text: 'Explore'},
+        {id: 'details', text: 'Details'},
+        {id: 'search', text: 'Search'},
+        {id: 'enrich', text: 'Enrich'},
+        {id: 'graphs', text: 'Visualise'}
+      ];
+      if (activeTabs) {
+        tabs = tabs.filter(function (tab, i) {
+          if (!activeTabs || i < 2) return true;
+          return activeTabs.indexOf(tab.id) >= 0;
+        });
+      }
       return {
-        tabs: [
-          {id: 'content', text: 'Explore'},
-          {id: 'details', text: 'Details'},
-          {id: 'search', text: 'Search'},
-          {id: 'enrich', text: 'Enrich'},
-          {id: 'graphs', text: 'Visualise'}
-        ],
+        tabs: tabs,
         templatePromise: this.props.service.fetchTemplates(),
         widgetPromise: this.props.service.fetchWidgets(),
         filterTerm: null,

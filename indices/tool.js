@@ -45,12 +45,17 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       origin: '*',
       scope: 'CurrentStep'
     });
+    var activeTabs = null;
+
+    chan.bind('configure', function (trans, params) {
+      activeTabs = params.activeTabs;
+      return 'ok';
+    });
 
     chan.bind('init', function (trans, params) {
 
       var listName = params.listName;
       var serviceArgs = params.service;
-      var activeTabs = params.activeTabs;
       var rootNode = document.body;
       var service = imjs.Service.connect(serviceArgs);
 

@@ -37,6 +37,19 @@ a,
     min-height: 80px;
 }
 
+.item-detail-listing li {
+    list-style-type: none;
+}
+
+.item-detail-listing .field {
+    width: 50%;
+    float: left;
+}
+.item-detail-listing .field .field-value {
+    float: right;
+    padding-right: 0.2em;
+}
+
 .show-list-tool {
     padding-top: 60px;
 }

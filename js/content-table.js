@@ -2,12 +2,13 @@ define([
     'react',
     'q',
     './mixins',
+    './query-cache',
     './table-heading',
     './table-body',
     './pager',
     './sorry',
     './loading'],
-    function (React, Q, mixins, TableHeading, TableBody, Pager, sorry, loading) {
+    function (React, Q, mixins, Caches, TableHeading, TableBody, Pager, sorry, loading) {
 
   'use strict';
 
@@ -31,6 +32,7 @@ define([
 
       var that = this
         , state = this.state
+        , rowCache = Caches.getCache('rows')
         , type = props.list.type;
 
       var modelP = props.service.fetchModel();
@@ -42,7 +44,7 @@ define([
       }
       this.setState(state);
 
-      Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, props));
+      Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, rowCache, props));
 
     },
     

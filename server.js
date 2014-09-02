@@ -1,3 +1,6 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+
 var PORT = process.env.PORT || 8080;
 var express = require("express");
 

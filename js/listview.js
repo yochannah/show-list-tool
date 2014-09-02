@@ -1,7 +1,14 @@
-define(['react', './local-storage', './mixins', './listcontents', './content-table', './breadcrumbs'],
-    function (React, localStorage, mixins, Contents, ContentTable, BreadCrumbs, AnalysisTools) {
+define(function (require, exports, module) {
 
   'use strict';
+  
+  var React = require('react')
+    , localStorage = require('./local-storage')
+    , mixins = require('./mixins')
+    , Contents = require('./listcontents')
+    , ContentTable = require('./content-table')
+    , DetailsView = require('./details-view')
+    , BreadCrumbs = require('./breadcrumbs');
 
   var viewKey = 'org.intermine.list-tool.list.view';
   var valuesCache = {};
@@ -54,8 +61,10 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
         contents = Contents(contentArgs);
       } else if (this.state.view === 'table') {
         contents = ContentTable(contentArgs);
+      } else if (this.state.view === 'details') {
+        contents = DetailsView(contentArgs);
       } else {
-        contents = d.p({className: 'error'}, 'Unknown view: ' + this.state.view);
+        contents = React.DOM.p({className: 'error'}, 'Unknown view: ' + this.state.view);
       }
 
       return React.DOM.div({}, controls, contents);

@@ -78,7 +78,7 @@ define([
       });
 
       Q.spread([modelP, summaryFieldsP],
-        _.compose(this._hasRun, this.buildQuery.bind(this, props)));
+        _.compose(this._hasRun, this.buildQuery.bind(this, rowCache, props)));
     },
 
     _hasRun: function () {

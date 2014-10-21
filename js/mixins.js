@@ -1,8 +1,7 @@
-define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
+define(['underscore', 'imjs'], function (_, imjs) {
 
   'use strict';
 
-  var rowCache = Caches.getCache('rows');
   var IS_BLANK = /^\s+$/;
 
   var ComputableState = {
@@ -15,6 +14,7 @@ define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
   var Filtered = {matchesFilter: matchesFilter};
 
   var BuildsQuery = {
+    itemMatchesFilter: itemMatchesFilter,
     rowMatchesFilter: rowMatchesFilter,
     buildQuery: buildQuery
   };
@@ -37,7 +37,7 @@ define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
   }
 
   function setStateProperty (prop, val) {
-      var state = this.state;
+      var state = {};
       state[prop] = val;
       this.setState(state);
   }
@@ -54,7 +54,7 @@ define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
   // Optional:
   //   * props.filterTerm: term to filter results by.
   // Sets: state.query, allItems, 
-  function buildQuery (props, model, summaryFields) {
+  function buildQuery (executor, props, model, summaryFields) {
     var that = this
       , path = props.path
       , list = props.list
@@ -75,21 +75,42 @@ define(['underscore', 'imjs', './query-cache'], function (_, imjs, Caches) {
     if (JSON.stringify(query) !== JSON.stringify(this.state.query)) {
       var q = new imjs.Query(query, props.service);
       q.model = model;
-      rowCache.submit(q).then(setItems);
+      executor.submit(q).then(setItems);
     }
     
     function setItems (items) {
-      var state = that.state;
-
-      state.allItems = items;
-      state.items = items.filter(rowMatchesFilter(props.filterTerm));
-      state.query = query;
+      var state = {
+        allItems: items,
+        items: items.filter(rowMatchesFilter(props.filterTerm)),
+        query: query
+      };
 
       that.setState(state);
     }
 
     function addField (field) {
       return path + field.replace(/^[^.]+/, '');
+    }
+  }
+
+  function itemMatchesFilter (filterTerm) {
+    if (filterTerm == null || IS_BLANK.test(filterTerm)) {
+      return alwaysTrue;
+    } else {
+      filterTerm = filterTerm.toLowerCase();
+      return function (item) {
+        var i, l, key, value, fields = _.keys(item);
+        for (i = 0, l = fields.length; i < l; i++) {
+          key = fields[i];
+          if (item[key]) {
+            value = String(item[key]).toLowerCase();
+            if (value.indexOf(filterTerm) >= 0) {
+              return true;
+            }
+          }
+        }
+        return false;
+      };
     }
   }
 

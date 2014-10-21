@@ -1,7 +1,14 @@
-define(['react', './local-storage', './mixins', './listcontents', './content-table', './breadcrumbs'],
-    function (React, localStorage, mixins, Contents, ContentTable, BreadCrumbs, AnalysisTools) {
+define(function (require, exports, module) {
 
   'use strict';
+  
+  var React = require('react')
+    , localStorage = require('./local-storage')
+    , mixins = require('./mixins')
+    , Contents = require('./listcontents')
+    , ContentTable = require('./content-table')
+    , DetailsView = require('./details-view')
+    , BreadCrumbs = require('./breadcrumbs');
 
   var viewKey = 'org.intermine.list-tool.list.view';
   var valuesCache = {};
@@ -25,40 +32,47 @@ define(['react', './local-storage', './mixins', './listcontents', './content-tab
       if (!this.state.path) {
         this.setStateProperty('path', props.list.type);
       }
-      props.service.fetchClassKeys().then(this.setStateProperty.bind(this, 'classkeys'));
+      props.service.fetchClassKeys()
+           .then(this.setStateProperty.bind(this, 'classkeys'), console.error.bind(console));
     },
 
     render: function () {
       var controls, contents, contentArgs;
+      try {
 
-      controls = BreadCrumbs({
-        path: this.state.path,
-        service: this.props.service,
-        proceedTo: this._proceedTo,
-        revertTo: this._revertTo,
-        view: this.state.view,
-        onChangeView: this._changeView
-      });
+        controls = BreadCrumbs({
+          path: this.state.path,
+          service: this.props.service,
+          proceedTo: this._proceedTo,
+          revertTo: this._revertTo,
+          view: this.state.view,
+          onChangeView: this._changeView
+        });
 
-      contentArgs = {
-        service: this.props.service,
-        list: this.props.list,
-        classkeys: this.state.classkeys,
-        path: this.state.path,
-        selected: (this.state.selected[this.state.path] || {}),
-        onItemSelected: this._onItemSelected,
-        filterTerm: this.props.filterTerm
-      };
+        contentArgs = {
+          service: this.props.service,
+          list: this.props.list,
+          classkeys: this.state.classkeys,
+          path: this.state.path,
+          selected: (this.state.selected[this.state.path] || {}),
+          onItemSelected: this._onItemSelected,
+          filterTerm: this.props.filterTerm
+        };
 
-      if (this.state.view === 'grid') {
-        contents = Contents(contentArgs);
-      } else if (this.state.view === 'table') {
-        contents = ContentTable(contentArgs);
-      } else {
-        contents = d.p({className: 'error'}, 'Unknown view: ' + this.state.view);
+        if (this.state.view === 'grid') {
+          contents = Contents(contentArgs);
+        } else if (this.state.view === 'table') {
+          contents = ContentTable(contentArgs);
+        } else if (this.state.view === 'details') {
+          contents = DetailsView(contentArgs);
+        } else {
+          contents = React.DOM.p({className: 'error'}, 'Unknown view: ' + this.state.view);
+        }
+
+        return React.DOM.div({}, controls, contents);
+      } catch (e) {
+        console.error(e);
       }
-
-      return React.DOM.div({}, controls, contents);
     },
 
     _onItemSelected: function (id, isSelected) {

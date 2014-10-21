@@ -20,26 +20,24 @@ define(['react', 'q', 'underscore', './mixins', './dropdown', './filter-box'],
       };
     },
 
+    renderViewChooser: function (key, label, icon) {
+        return d.button(
+          {
+            type: 'button',
+            className: 'btn btn-default' + (this.props.view === key ? ' active' : ''),
+            onClick: this.props.onChangeView.bind(null, key)
+          },
+          d.i({className: 'fa fa-' + icon}),
+          d.span({className: '.visible-lg'}, ' ', label));
+    },
+
     render: function () {
 
-      var viewChooser = d.div(
+      var viewChoosers = d.div(
         {className: 'pull-right btn-group'},
-        d.button(
-          {
-            type: 'button',
-            className: 'btn btn-default' + (this.props.view === 'grid' ? ' active' : ''),
-            onClick: this.props.onChangeView.bind(null, 'grid')
-          },
-          d.i({className: 'fa fa-th-large'}),
-          d.span({className: '.visible-lg'}, ' Grid')),
-        d.button(
-          {
-            type: 'button',
-            className: 'btn btn-default' + (this.props.view === 'table' ? ' active' : ''),
-            onClick: this.props.onChangeView.bind(null, 'table')
-          },
-          d.i({className: 'fa fa-th-list'}),
-          d.span({className: '.visible-lg'}, ' Table')));
+        this.renderViewChooser('grid', 'Grid', 'th-large'),
+        this.renderViewChooser('table', 'Table', 'th-list'),
+        this.renderViewChooser('details', 'Details', 'bars'));
 
       var segments = this.state.segments.map(function (seg, i, a) {
         var isLast = i + 1 == a.length;
@@ -61,9 +59,9 @@ define(['react', 'q', 'underscore', './mixins', './dropdown', './filter-box'],
             return a({onClick: this.props.proceedTo.bind(null, ref[0])}, ref[1]);
           }.bind(this))
         }));
-        return ol({className: 'breadcrumb'}, viewChooser, segments, dropdown);
+        return ol({className: 'breadcrumb'}, viewChoosers, segments, dropdown);
       } else {
-        return ol({className: 'breadcrumb'}, viewChooser, segments);
+        return ol({className: 'breadcrumb'}, viewChoosers, segments);
       }
 
     },

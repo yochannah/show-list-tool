@@ -17,21 +17,51 @@ chan.call({
   }
 });
 
-chan.call({
-  method: 'init',
-  params: {
-    listName: 'PL FlyTF_putativeTFs',
-    service: {
-      root: "http://www.flymine.org/query"
+function loadList () {
+  chan.call({
+    method: 'init',
+    params: {
+      listName: 'PL FlyTF_putativeTFs',
+      service: {
+        root: "http://www.flymine.org/query"
+      }
+    },
+    success: function () {
+      console.log("Tool initialised");
+    },
+    error: function (e) {
+      console.log("initialisation failed because: " + e);
     }
-  },
-  success: function () {
-    console.log("Tool initialised");
-  },
-  error: function (e) {
-    console.log("initialisation failed because: " + e);
-  }
-});
+  });
+}
+
+function loadItem () {
+
+  chan.call({
+    method: 'init',
+    params: {
+      item: {
+        type: 'Gene',
+        fields: {
+          'organism.taxonId': 7227,
+          'primaryIdentifier': 'FBgn0000606'
+        }
+      },
+      service: {
+        root: "http://www.flymine.org/query"
+      }
+    },
+    success: function () {
+      console.log("Tool initialised");
+    },
+    error: function (e) {
+      console.log("initialisation failed because: " + e);
+    }
+  });
+
+}
+
+loadList();
 
 var head = document.getElementsByTagName("head")[0];
 var links = document.getElementsByTagName("link");

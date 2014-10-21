@@ -37,7 +37,14 @@ require.config({
     }
 });
 
-require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], function (React, imjs, View, Channel) {
+require([
+    'react',
+    'imjs',
+    'jschannel',
+    './analysis-tools',
+    './object/report',
+    'bootstrap'], function (React, imjs, Channel, ListView, ObjectView) {
+
     'use strict';
 
     var chan = Channel.build({
@@ -45,6 +52,7 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       origin: '*',
       scope: 'CurrentStep'
     });
+
     var activeTabs = null;
 
     chan.bind('configure', function (trans, params) {
@@ -53,35 +61,23 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
     });
 
     chan.bind('init', function (trans, params) {
-
-      var listName = params.listName;
-      var serviceArgs = params.service;
-      var rootNode = document.body;
-      var service = imjs.Service.connect(serviceArgs);
-
-      service.fetchList(listName).then(function showList (list) {
-        var listView = new View({
-          service: service,
-          activeTabs: activeTabs,
-          list: list,
-          onSelectedItems: reportItems,
-          executeQuery: executeQuery.bind(null, serviceArgs.root),
-          wants: wants
-        });
-        React.renderComponent(listView, rootNode);
-
-        chan.notify({
-          method: 'has-list',
-          params: {
-            root: service.root,
-            name: list.name,
-            type: list.type
-          }
-        });
-
+      var loadView, rootNode = document.body;
+      if (params.listName) {
+        loadView = initList(params);
+      } else if (params.item) {
+        loadView = initItem(params);
+      } else {
+        console.error("Unknown message", params);
+        trans.error('Could not interpret message');
+      }
+      loadView.then(function (view) {
+        React.renderComponent(view, rootNode);
+        trans.complete('ok');
+      }, function (error) {
+        console.error('Failed to initialise view', error);
+        trans.error('not ok');
       });
-
-      return 'ok';
+      trans.delayReturn(true);
     });
 
     chan.bind('style', function (trans, params) {
@@ -95,6 +91,62 @@ require(['react', 'imjs', './analysis-tools', 'jschannel', 'bootstrap'], functio
       head.appendChild(link);
 
     });
+
+    function initList (params) {
+
+      var listName = params.listName;
+      var serviceArgs = params.service;
+      var service = imjs.Service.connect(serviceArgs);
+
+      return service.fetchList(listName).then(function showList (list) {
+
+        var listView = new ListView({
+          service: service,
+          activeTabs: activeTabs,
+          list: list,
+          onSelectedItems: reportItems,
+          executeQuery: executeQuery.bind(null, serviceArgs.root),
+          wants: wants
+        });
+
+        chan.notify({
+          method: 'has-list',
+          params: {
+            root: service.root,
+            name: list.name,
+            type: list.type
+          }
+        });
+        return listView;
+
+      });
+    }
+
+    function initItem (params) {
+
+      var type = params.item.type; // eg: "Gene"
+      var fields = params.item.fields; // eg: {'organism.taxonId': 7227, primaryIdentifier: 'FBGN000123'}
+      var serviceArgs = params.service;
+      var service = imjs.Service.connect(serviceArgs);
+
+      var query = {
+        from: type,
+        select: ['id'],
+        where: fields
+      };
+
+      console.log("Looking for a " + type, fields);
+
+      return service.records(query).then(function (objects) {
+        var object = objects[0];
+        var view = ObjectView.create({
+          service: service,
+          object: {id: object.objectId, type: object['class']}
+        });
+        reportItems(type, type, [object.objectId]);
+        return view;
+      });
+    }
 
     function wants (message) {
       chan.notify({

@@ -37,6 +37,45 @@ a,
     min-height: 80px;
 }
 
+.item-detail-listing {
+    padding: 0.25em;
+}
+
+.item-detail-listing li {
+    list-style-type: none;
+}
+
+.object-type {
+    transition: all 1s ease-in-out;
+}
+
+.item-detail-listing .field {
+    width: 50%;
+    float: left;
+}
+.item-detail-listing .field .value {
+    float: right;
+    padding-right: 0.2em;
+}
+.item-detail-listing .field .name {
+    float: left;
+    padding-right: 0.2em;
+}
+
+.item-details {
+    clear: both;
+}
+
+.collection .item-details {
+    border-bottom: 1px solid #CACACA;
+    margin-top: 0.1em;
+    padding-bottom: 0.25em;
+}
+
+.collection .item-details:last-child {
+    border-bottom: none;
+}
+
 .show-list-tool {
     padding-top: 60px;
 }
@@ -156,4 +195,75 @@ ul.nav-tabs > li.active > a {
 
 .slide-left-leave.slide-toggle-leave-active {
     left: -100%;
+}
+
+.summary-value.reference {
+    font-style: italic;
+}
+.summary-value {
+    margin-right: 0.5em;
+}
+.summary-value:last-child {
+    margin-right; 0;
+}
+
+.reference h2.object-title {
+    font-size: 16px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+.reference .object-title .object-type.name {
+    float: left; /* Cannot assign width to inline element */
+    min-width: 25%;
+}
+
+.row.colls {
+    margin-left: 0;
+}
+
+.object-title {
+}
+
+.object-title .object-type {
+    cursor: pointer;
+    margin-right: 2em;
+}
+
+.object-title .object-type i.fa {
+    margin-right: 1em;
+}
+
+.attribute .name {
+    font-weight: bold;
+}
+
+.attribute .value.string {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.attribute .value.org-intermine-objectstore-query-clobaccess {
+    font-family: monospace;
+    word-break: break-all;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.reference .row {
+    padding-left: 2em;
+}
+
+.collection-items {
+    list-style-type: none;
+}
+
+.reference.collection {
+    float: left;
+}
+.reference.collection .object-title {
+    font-size: 16px;
+}
+
+.reference-link {
+    margin-right: 1em;
 }

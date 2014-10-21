@@ -36,7 +36,13 @@ require.config({
     }
 });
 
-require(['react', 'imjs', './object/report', 'bootstrap'], function (React, imjs, View) {
+var deps = [
+  'react',
+  'imjs',
+  './object/report',
+  'bootstrap']
+
+require(deps, function (React, imjs, View) {
     'use strict';
 
     var listName = "PL FlyAtlas_tubules_top";

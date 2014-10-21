@@ -3,8 +3,8 @@ define(function (require, exports, module) {
   'use strict';
 
   var React      = require('react')
-    , Q          = require('q')
     , _          = require('underscore')
+    , intermine  = require('imjs')
     , Caches     = require('./query-cache')
     , mixins     = require('./mixins')
     , ObjectView = require('./object-view');
@@ -35,11 +35,7 @@ define(function (require, exports, module) {
     },
 
     render: function () {
-      try {
-        return d.ul({className: 'item-detail-listing'}, this.state.items.map(this.renderItem));
-      } catch (e) {
-        console.error(e, e.stack);
-      }
+      return d.ul({className: 'item-detail-listing'}, this.state.items.map(this.renderItem));
     },
 
     renderItem: function (item) {
@@ -55,7 +51,7 @@ define(function (require, exports, module) {
       var that = this;
       try {
         props.list.query(['**'])
-                  .then(runQuery)
+                  .then(_.compose(runQuery, intermine.utils.dejoin))
                   .then(function (items) {
                     return items.filter(mixins.BuildsQuery.itemMatchesFilter(props.filterTerm));
                   })

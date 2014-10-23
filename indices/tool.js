@@ -104,7 +104,7 @@ require([
           service: service,
           activeTabs: activeTabs,
           list: list,
-          onSelectedItems: reportItems,
+          onSelectedItems: reportItems.bind(null, service),
           executeQuery: executeQuery.bind(null, serviceArgs.root),
           wants: wants
         });
@@ -116,6 +116,10 @@ require([
             name: list.name,
             type: list.type
           }
+        });
+        list.contents().then(function (objs) {
+          var ids = objs.map(function (o) { return o.objectId; });
+          reportItems(service, list.type, list.type, ids, ['available']);
         });
         return listView;
 
@@ -135,15 +139,14 @@ require([
         where: fields
       };
 
-      console.log("Looking for a " + type, fields);
-
       return service.records(query).then(function (objects) {
         var object = objects[0];
+        var path = type; // here the path is the same as the type.
         var view = ObjectView.create({
           service: service,
           object: {id: object.objectId, type: object['class']}
         });
-        reportItems(type, type, [object.objectId]);
+        reportItems(service, path, type, [object.objectId], ['available']);
         return view;
       });
     }
@@ -173,14 +176,19 @@ require([
       });
     }
 
-    function reportItems (path, type, ids) {
+    function reportItems (service, path, type, ids, categories) {
+      if (!categories) {
+        categories = ['selected'];
+      }
       chan.notify({
-        method: 'has-items',
+        method: 'has',
         params: {
-          key: path,   // String - any identifier.
+          what: 'items',
+          key: (categories.join(',') + '-' + path), // String - any identifier.
           noun: type, // String - eg: "Protein"
-          categories: ['selected'],
-          ids: ids  // Array[Int] - eg: [123, 456, 789]
+          categories: categories, // Array[string] - eg: ['selected']
+          ids: ids,  // Array[Int] - eg: [123, 456, 789]
+          service: {root: service.root},
         }
       });
     }

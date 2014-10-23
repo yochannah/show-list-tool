@@ -8,11 +8,28 @@
 </head>
 
 <body>
-    <iframe seamless height="700px" width="1000px" id="child" src="tool.html"></iframe>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body">
+            <iframe seamless height="700px" width="100%" id="child" src="tool.html"></iframe>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-default" onclick="loadList()">Load List</button>
+        <button class="btn btn-default" onclick="loadItem()">Load Item</button>
+    </div>
+    <pre id="stdout"></pre>
+
     <script src="indices/test.js"></script>
 
-    <button onclick="loadList()">Load List</button>
-    <button onclick="loadItem()">Load Item</button>
 </body>
+
+<style>
+iframe { border: none; }
+.panel-body { padding: none; }
+</style>
 
 </html>

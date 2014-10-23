@@ -92,7 +92,7 @@ chan.bind('wants', function (trans, params) {
 
 chan.bind('has', function (trans, params) {
   if (params.what === 'items') {
-    itemsMsgs[params.key] = params;
+    itemsMsgs[params.data.key] = params.data;
   }
   var key, msg, buffer = [];
   for (key in itemsMsgs) {

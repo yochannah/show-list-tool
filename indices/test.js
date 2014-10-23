@@ -4,6 +4,8 @@ var chan = Channel.build({
   scope: 'CurrentStep'
 });
 
+var itemsMsgs = {};
+
 chan.call({
   method: 'configure',
   params: {
@@ -18,10 +20,12 @@ chan.call({
 });
 
 function loadList () {
+  var listName = 'PL FlyAtlas_brain_top';
+  document.querySelector('.panel-heading').innerHTML = listName;
   chan.call({
     method: 'init',
     params: {
-      listName: 'PL FlyTF_putativeTFs',
+      listName: listName,
       service: {
         root: "http://www.flymine.org/query"
       }
@@ -36,7 +40,8 @@ function loadList () {
 }
 
 function loadItem () {
-
+  var primaryId = 'FBgn0000606';
+  document.querySelector('.panel-heading').innerHTML = primaryId;
   chan.call({
     method: 'init',
     params: {
@@ -44,7 +49,7 @@ function loadItem () {
         type: 'Gene',
         fields: {
           'organism.taxonId': 7227,
-          'primaryIdentifier': 'FBgn0000606'
+          'primaryIdentifier': primaryId
         }
       },
       service: {
@@ -60,8 +65,6 @@ function loadItem () {
   });
 
 }
-
-loadList();
 
 var head = document.getElementsByTagName("head")[0];
 var links = document.getElementsByTagName("link");
@@ -87,3 +90,20 @@ chan.bind('wants', function (trans, params) {
   console.log('WANT', params.what, params.data);
 });
 
+chan.bind('has', function (trans, params) {
+  if (params.what === 'items') {
+    itemsMsgs[params.key] = params;
+  }
+  var key, msg, buffer = [];
+  for (key in itemsMsgs) {
+    msg = itemsMsgs[key];
+    if (msg.ids.length) {
+      buffer.push(msg.noun + ' (' + msg.categories + '): ' + msg.ids.join(', '));
+    }
+  }
+
+  document.getElementById('stdout').innerHTML = buffer.join('\n');
+});
+
+// Kickoff.
+loadList();

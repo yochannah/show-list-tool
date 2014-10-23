@@ -184,11 +184,13 @@ require([
         method: 'has',
         params: {
           what: 'items',
-          key: (categories.join(',') + '-' + path), // String - any identifier.
-          noun: type, // String - eg: "Protein"
-          categories: categories, // Array[string] - eg: ['selected']
-          ids: ids,  // Array[Int] - eg: [123, 456, 789]
-          service: {root: service.root},
+          data: {
+            key: (categories.join(',') + '-' + path), // String - any identifier.
+            noun: type, // String - eg: "Protein"
+            categories: categories, // Array[string] - eg: ['selected']
+            ids: ids,  // Array[Int] - eg: [123, 456, 789]
+            service: {root: service.root}
+          }
         }
       });
     }

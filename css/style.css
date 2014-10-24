@@ -267,3 +267,7 @@ ul.nav-tabs > li.active > a {
 .reference-link {
     margin-right: 1em;
 }
+
+.row.fields {
+    padding: 0 1em;
+}

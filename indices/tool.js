@@ -95,6 +95,9 @@ require([
     function initList (params) {
       var listName = params.listName;
       var serviceArgs = params.service;
+      serviceArgs.errorHandler = function(error){
+        console.error('Communication error!\n', error);
+      }
       var service = imjs.Service.connect(serviceArgs);
 
       return service.fetchList(listName).then(function showList (list) {
@@ -121,7 +124,6 @@ require([
           reportItems(service, list.type, list.type, ids, ['available']);
         });
         return listView;
-
       });
     }
 

@@ -91,17 +91,18 @@ chan.bind('wants', function (trans, params) {
 });
 
 chan.bind('has', function (trans, params) {
+  var key, msg, buffer = [];
   if (params.what === 'items') {
     itemsMsgs[params.data.key] = params.data;
   }
-  var key, msg, buffer = [];
   for (key in itemsMsgs) {
     msg = itemsMsgs[key];
-    if (msg.ids.length) {
-      buffer.push(msg.noun + ' (' + msg.categories + '): ' + msg.ids.join(', '));
+    if (msg.ids && msg.ids.length) {
+      buffer.push(msg.noun + ' (' + msg.categories + '): ' + msg.id.join(', '));
+    } else if (msg.id) {
+      buffer.push(msg.noun + ' (' + msg.categories + '): ' + msg.id.join(', '));
     }
   }
-
   document.getElementById('stdout').innerHTML = buffer.join('\n');
 });
 

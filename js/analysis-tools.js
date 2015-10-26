@@ -122,7 +122,7 @@ define(['react',
     },
 
     _renderTableTab: function () {
-      return TableTab({
+      return React.createElement(TableTab,{
         service: this.props.service,
         list: this.props.list,
         filterTerm: this.state.filterTerm
@@ -130,7 +130,7 @@ define(['react',
     },
 
     _renderSearchTab: function () {
-      return SearchTab({
+      return React.createElement(SearchTab,{
         service: this.props.service,
         list: this.props.list,
         templatePromise: this.state.templatePromise,
@@ -139,7 +139,7 @@ define(['react',
       });
     },
     _renderEnrichmentTab: function () {
-      return EnrichmentTab({
+      return React.createElement(EnrichmentTab,{
         service: this.props.service,
         list: this.props.list,
         widgetPromise: this.state.widgetPromise,
@@ -148,7 +148,7 @@ define(['react',
       });
     },
     _renderVisualisationTab: function () {
-      return VisualisationTab({
+      return React.createElement(VisualisationTab,{
         service: this.props.service,
         list: this.props.list,
         widgetPromise: this.state.widgetPromise,

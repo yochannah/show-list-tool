@@ -12,7 +12,7 @@ define(function (require, exports, module) {
 
   var Report;
 
-  exports.create = Report = React.createClass({
+  module.exports = Report = React.createClass({
 
     displayName: 'Report'
 
@@ -30,11 +30,11 @@ define(function (require, exports, module) {
       var objs = this.state.objects;
       return d.div(
         {},
-        Breadcrumbs.create({
+        React.createElement(Breadcrumbs,{
           objects: objs,
           onRevert: this.setObjects
         }),
-        ObjectView.create({
+        React.createElement(ObjectView, {
           service: this.props.service,
           object: objs[objs.length - 1],
           onObjectSelected: this.goToObject

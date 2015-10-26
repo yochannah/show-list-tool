@@ -6,7 +6,8 @@ require.config({
         q: '../bower_components/q/q',
         underscore: '../bower_components/underscore/underscore',
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
-        react: '../bower_components/react/react-with-addons', 
+        react: '../bower_components/react/react-with-addons',
+        reactdom: '../bower_components/react/react-dom',
         jschannel: '../bower_components/jschannel/src/jschannel',
         imjs: '../bower_components/imjs/js/im'
     },
@@ -31,30 +32,35 @@ require.config({
             exports: '_'
         },
         react: {
-            exports: 'React',
+            exports: 'React'
+        },
+        reactdom: {
+            exports: 'ReactDOM'
         }
     }
 });
 
-require(['react', 'imjs', './analysis-tools', 'bootstrap'], function (React, imjs, View) {
+require(['react', 'reactdom', 'imjs', './analysis-tools', 'bootstrap'], function (React, ReactDOM, imjs, View) {
     'use strict';
 
-    var listName = "PL FlyAtlas_tubules_top";
-    var url = "http://www.flymine.org/query";
-    var rootNode = document.body;
-    var service = imjs.Service.connect({root: url});
+    //var listName = "PL FlyAtlas_tubules_top";
+    var listName = "My awesome list";
+//    var url = "http://www.flymine.org/query";
 
+    var url = "http://localhost:8080/flymine/service";
+    var rootNode = document.getElementById('showlist');
+    var service = imjs.Service.connect({root: url, token:'v1I54009a4N65c75K6Cf'});
     service.fetchList(listName).then(function showList (list) {
-      var listView = new View({
+      try {
+      ReactDOM.render(React.createElement(View, {
         service: service,
         list: list,
         onSelectedItems: reportItems,
         executeQuery: executeQuery,
         wants: wants
-      });
-      React.renderComponent(listView, rootNode);
+      }), rootNode);
+    } catch(e){console.error(e);}
     });
-
     function reportItems (path, type, ids) {
       console.log("The user selected " + ids.length + " " + type + "s from " + path);
     }

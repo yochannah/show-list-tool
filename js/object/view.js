@@ -15,7 +15,7 @@ define(function (require, exports, module) {
 
   var ObjectView;
 
-  exports.create = ObjectView = React.createClass({
+  module.exports = ObjectView = React.createClass({
 
     displayName: 'ObjectView',
 

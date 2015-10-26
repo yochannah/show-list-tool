@@ -25,12 +25,12 @@ define(['react', 'q', 'underscore', './local-storage', './mixins', './predicates
     },
 
     render: function render () {
-      var controls = EnrichmentControls(_.extend(
+      var controls = React.createElement(EnrichmentControls,_.extend(
         {onChange: this._handleChange},
         this.props,
         this.state
       ));
-      var widgets = EnrichmentWidgets(_.extend(
+      var widgets = React.createElement(EnrichmentWidgets,_.extend(
         {filterTerm: this.props.filterTerm, wantsEnrichment: this._wantsEnrichment},
         this.props,
         this.state

@@ -28,14 +28,14 @@ define(['react', './mixins', './table-heading', './table-body', './pager', './ed
       });
 
     },
-    
+
     render: function () {
       return React.DOM.div(
           null,
-          EditControls({
+          React.createElement(EditControls,{
             selected: this.state.selected
           }),
-          Pager({
+          React.createElement(Pager,{
             offset: this.state.offset,
             size: this.state.size,
             length: this.state.total,
@@ -46,13 +46,13 @@ define(['react', './mixins', './table-heading', './table-body', './pager', './ed
           }),
           React.DOM.table(
             {className: 'table table-striped'},
-            TableHeading({
+            React.createElement(TableHeading,{
               service: this.props.service,
               view: this.state.query.select,
               allSelected: this.state.selected.all,
               onChangeAll: this._onAllSelected
             }),
-            TableBody({
+            React.createElement(TableBody,{
               offset: this.state.offset,
               size: this.state.size,
               service:    this.props.service,
@@ -89,4 +89,3 @@ define(['react', './mixins', './table-heading', './table-body', './pager', './ed
 
   return TableTab;
 });
-

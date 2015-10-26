@@ -7,7 +7,8 @@ require.config({
         q: loc + 'bower_components/q/q',
         underscore: loc + 'bower_components/underscore/underscore',
         bootstrap: loc + 'bower_components/bootstrap/dist/js/bootstrap.min',
-        react: loc + 'bower_components/react/react-with-addons',
+        react: '../bower_components/react/react-with-addons',
+        reactdom: '../bower_components/react/react-dom',
         jschannel: loc + 'bower_components/jschannel/src/jschannel',
         imjs:  loc + 'bower_components/imjs/js/im'
     },
@@ -33,17 +34,21 @@ require.config({
         },
         react: {
             exports: 'React',
+        },
+        reactdom: {
+            exports: 'ReactDOM',
         }
     }
 });
 
 require([
     'react',
+    'reactdom',
     'imjs',
     'jschannel',
     './analysis-tools',
     './object/report',
-    'bootstrap'], function (React, imjs, Channel, ListView, ObjectView) {
+    'bootstrap'], function (React, ReactDOM, imjs, Channel, ListView, ObjectView) {
 
     'use strict';
 
@@ -61,7 +66,7 @@ require([
     });
 
     chan.bind('init', function (trans, params) {
-      var loadView, rootNode = document.body;
+      var loadView, rootNode = document.getElementById('theTool');
       if (params.listName) {
         loadView = initList(params);
       } else if (params.item) {
@@ -71,7 +76,9 @@ require([
         trans.error('Could not interpret message');
       }
       loadView.then(function (view) {
-        React.renderComponent(view, rootNode);
+        try {
+        ReactDOM.render(view, rootNode);
+      } catch (e) {console.error(e);}
         trans.complete('ok');
       }, function (error) {
         console.error('Failed to initialise view', error);
@@ -102,7 +109,7 @@ require([
 
       return service.fetchList(listName).then(function showList (list) {
 
-        var listView = new ListView({
+        var listView =  React.createElement(ListView,{
           service: service,
           activeTabs: activeTabs,
           list: list,
@@ -143,7 +150,8 @@ require([
       return service.records(query).then(function (objects) {
         var object = objects[0];
         var path = type; // here the path is the same as the type.
-        var view = ObjectView.create({
+        console.log('is object view valid?', React.isValidElement(ObjectView));
+        var view = React.createElement(ObjectView,{
           service: service,
           object: {id: object.objectId, type: object['class']}
         });

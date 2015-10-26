@@ -53,7 +53,7 @@ define([
         }
       );
 
-      return EnrichmentWidgetLine({
+      return React.createElement(EnrichmentWidgetLine,{
         widget: widget,
         key: widget.name,
         enriching: enriching,

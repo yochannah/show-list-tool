@@ -26,13 +26,13 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
             null,
             "Correction"
           ),
-          SelectInput({
+          React.createElement(SelectInput,{
             onChange: this._setCorrection,
             options: this.state.correctionAlgorithms,
             selected: this.props.correction
           }));
     },
-  
+
     _setCorrection: function (algorithm) {
       this.props.onChange('correction', (algorithm || 'none'));
     },
@@ -52,11 +52,11 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
               value: this.state.maxp,
               type: 'text'
             }));
-            
+
     },
 
     _setMaxP: function (event) {
-      var value = this.refs.maxp.getDOMNode().value;
+      var value = this.refs.maxp.value;
       this.setStateProperty('maxp', value); // Reflect it the control.
       this.reportChange('maxp', value);
     },
@@ -72,7 +72,7 @@ define(['react', 'q', 'underscore', './mixins', './predicates', './select-input'
             null,
             "Background Population"
           ),
-          SelectInput({
+          React.createElement(SelectInput,{
             onChange: this._setBackground,
             options: this.state.backgrounds,
             selected: this.props.backgroundPopulation,

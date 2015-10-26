@@ -6,11 +6,12 @@ define(function (require, exports, module) {
     , _      = require('underscore')
     , mixins = require('../mixins')
     , Caches = require('../query-cache')
+    , classNames = require('../../bower_components/classnames/index')
     , d = React.DOM;
 
   var Breadcrumbs;
 
-  exports.create = Breadcrumbs = React.createClass({
+  module.exports = Breadcrumbs = React.createClass({
 
     displayName: 'Breadcrumbs'
 
@@ -22,9 +23,7 @@ define(function (require, exports, module) {
     , renderCrumb: function (object, index, all) {
       var content;
       var isLast = index === (all.length - 1);
-      var classes = React.addons.classSet({
-        'active': isLast
-      });
+      var classes = classNames({'active': isLast});
       if (isLast) {
         content = this.renderObject(object);
       } else {

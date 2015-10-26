@@ -6,6 +6,7 @@ define(function (require, exports, module) {
     , intermine = require('imjs')
     , mixins    = require('../mixins')
     , Caches    = require('../query-cache')
+    , classNames = require('../../bower_components/classnames/index')
     , d = React.DOM
     , MAX_SUMM_FIELD_LEN = 100
     , cache = Caches.getCache('rows')
@@ -27,7 +28,7 @@ define(function (require, exports, module) {
 
     render: function () {
       var summaryValues = [];
-      var cx = React.addons.classSet;
+      var cx = classNames;
       if (!this.props.openable || !this.props.open) {
         summaryValues = this.state.summaryValues.map(function (sv, i) {
           var pathSegments = sv.path.split(/\./).length; // > 2) ? 'reference' : 'attribute';

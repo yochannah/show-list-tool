@@ -20,7 +20,7 @@ define(function (require, exports, module) {
     getInitialState: function () {
       return {
         path: this.props.list.type,
-        view: (localStorage[viewKey] || 'table'), 
+        view: (localStorage[viewKey] || 'table'),
         selected: {},
         classkeys: {}
       }
@@ -40,7 +40,7 @@ define(function (require, exports, module) {
       var controls, contents, contentArgs;
       try {
 
-        controls = BreadCrumbs({
+        controls = React.createElement(BreadCrumbs,{
           path: this.state.path,
           service: this.props.service,
           proceedTo: this._proceedTo,
@@ -60,11 +60,11 @@ define(function (require, exports, module) {
         };
 
         if (this.state.view === 'grid') {
-          contents = Contents(contentArgs);
+          contents = React.createElement(Contents,contentArgs);
         } else if (this.state.view === 'table') {
-          contents = ContentTable(contentArgs);
+          contents = React.createElement(ContentTable,contentArgs);
         } else if (this.state.view === 'details') {
-          contents = DetailsView(contentArgs);
+          contents = React.createElement(DetailsView,contentArgs);
         } else {
           contents = React.DOM.p({className: 'error'}, 'Unknown view: ' + this.state.view);
         }

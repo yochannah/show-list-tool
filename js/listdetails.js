@@ -6,7 +6,7 @@ define(['react', './listheading'], function (React, Heading) {
     displayName: 'ListDetails',
 
     render: function () {
-      return React.createElement(Heading, {list: this.props, _addTag:this._addTag});
+      return React.createElement(Heading, {list: this.props.list, _addTag:this._addTag});
     },
     _addTag : function(tag){
       this.props._addTag(tag);

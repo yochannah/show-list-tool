@@ -56,7 +56,7 @@ define(['react', 'q', 'underscore', './mixins', './dropdown', './filter-box'],
       }.bind(this));
 
       if (this.state.references.length) {
-        var dropdown = li({}, Dropdown({
+        var dropdown = li({}, React.createElement(Dropdown,{
           mainTitle: "Proceed to",
           links: this.state.references.map(function (ref, i) {
             return a({onClick: this.props.proceedTo.bind(null, ref[0])}, ref[1]);

@@ -27,14 +27,14 @@ define(['react'], function (React) {
     },
 
     componentDidUpdate: expandMenu,
-    
+
     componentDidMount: expandMenu
   });
 
   return Dropdown;
 
   function expandMenu () {
-    var node = this.refs.dropdownMenu.getDOMNode();
+    var node = this.refs.dropdownMenu;
     var w = 220; // hidden intially. Should be enough... :(
     var kids = node.children.length;
     node.style.width = (w * kids) + 'px';
@@ -52,6 +52,6 @@ define(['react'], function (React) {
       currentGroup.push(x);
     });
 
-    return groups; 
+    return groups;
   }
 });

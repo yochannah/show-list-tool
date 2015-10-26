@@ -29,7 +29,7 @@ define(['react'], function (React) {
     },
 
     _updateTag: function () {
-      var val = this.refs.tagText.getDOMNode().value;
+      var val = this.refs.tagText.value;
       var state = this.state;
       state.tagText = val;
       state.isValid = isValidTagName(val);

@@ -47,13 +47,13 @@ define([
       Q.spread([modelP, summaryFieldsP], this.buildQuery.bind(this, rowCache, props));
 
     },
-    
+
     render: function () {
       var content;
       if (this.state.items && this.state.items.length) {
         content = React.DOM.table(
             {className: 'table table-striped'},
-            TableHeading({
+            React.createElement(TableHeading,{
               path: this.props.path,
               service: this.props.service,
               view: this.state.query.select,
@@ -61,7 +61,7 @@ define([
               sortASC: this.state.sortASC,
               onSort: this._setSort
             }),
-            TableBody({
+            React.createElement(TableBody,{
               offset: this.state.offset,
               size: this.state.size,
               rows:       this.state.items,
@@ -81,7 +81,7 @@ define([
 
       return React.DOM.div(
           null,
-          Pager({
+          React.createElement(Pager,{
             offset: this.state.offset,
             size: this.state.size,
             length: (this.state.items && this.state.items.length),
@@ -119,4 +119,3 @@ define([
 
   return ContentTable;
 });
-

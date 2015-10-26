@@ -1,7 +1,7 @@
 define(['react',
     './listview',
     './table-tab',
-    './listdetails', 
+    './listdetails',
     './search-tab',
     './enrichment-tab',
     './filter-box',
@@ -78,10 +78,10 @@ define(['react',
           break;
       }
 
-      var filterBox = FilterBox({className: 'pull-right', onChange: this._handleFilterChange});
+      var filterBox = React.createElement(FilterBox,{className: 'pull-right', onChange: this._handleFilterChange});
 
       return div({className: 'show-list-tool'},
-        ul({className: 'nav nav-tabs'}, tabs, filterBox), 
+        ul({className: 'nav nav-tabs'}, tabs, filterBox),
         div({className: 'tab-content'}, tabContent)
       );
     },
@@ -97,7 +97,7 @@ define(['react',
     },
 
     _renderContentTab: function () {
-      return ListView({
+      return React.createElement(ListView,{
         service: this.props.service,
         list: this.props.list,
         filterTerm: this.state.filterTerm,
@@ -115,7 +115,7 @@ define(['react',
     },
 
     _renderDetailTab: function () {
-      return ListDetails({
+      return React.createElement(ListDetails, {
         service: this.props.service,
         list: this.props.list
       });

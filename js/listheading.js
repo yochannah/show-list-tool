@@ -18,13 +18,13 @@ define(['react', './tag-adder'], function (React, TagAdder) {
           key: 'header',
           ref: 'title',
           className: 'list-title',
-        }, 
-        this.props.name
+        },
+        this.props.list.name
       );
-      var description = d.p({className: 'description'}, this.props.description);
+      var description = d.p({className: 'description'}, this.props.list.description);
       var tags = d.div(
         {className: 'well well-sm'},
-        this.props.tags.map(this._renderTag),
+        this.props.list.tags.map(this._renderTag),
         this._renderAddTagControl(),
         d.div({className: 'clearfix'}));
       return React.DOM.div({
@@ -34,7 +34,11 @@ define(['react', './tag-adder'], function (React, TagAdder) {
     },
 
     _renderAddTagControl: function () {
-      return TagAdder(this.props);
+      return Reac.createElement(TagAdder, {list : this.props.list, _addTag : _addTag});
+    },
+
+    _addTag : function(tag){
+      this.setState(this.state.tags.concat([tag]));
     },
 
     _renderTag: function (tag, i) {

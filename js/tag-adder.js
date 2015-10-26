@@ -19,7 +19,8 @@ define(['react'], function (React) {
 
     render: function () {
       return d.form(
-        {className: 'form-inline pull-right list-tagger'},
+        {className: 'form-inline pull-right list-tagger',
+          onSubmit:this._saveTag},
         d.div(
           {className: 'form-group' + (this.state.isValid ? '' : ' has-error')},
           d.input({ref: 'tagText', className: 'form-control input-sm', value: this.state.newTag, onChange: this._updateTag, placeholder: 'my new tag'})),
@@ -34,7 +35,16 @@ define(['react'], function (React) {
       state.isValid = isValidTagName(val);
       state.hasTag = state.isValid && val && val.length;
       this.setState(state);
+      this.props._addTag(state.tagText);
+    },
+
+    _saveTag : function handleSubmit(e) {
+      e.preventDefault();
+      console.log('%cThis.props: ', 'color:yellowgreen;font-weight:bold',this.props);
+      console.log('%cThis.state: ', 'color:orange;font-weight:bold',this.state);
+      this.props.list.addTags([this.state.tagText]);
     }
+
   });
 
   return TagAdder;

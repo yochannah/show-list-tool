@@ -3,6 +3,7 @@ define(['react', './sorry'], function(React, sorry) {
   'use strict';
 
   var IM_PREFIX = /^im:/i;
+  var LEGAL_CHARS = /^[\w\.\: \-]+$/g;
 
   var d = React.DOM;
 
@@ -44,9 +45,6 @@ define(['react', './sorry'], function(React, sorry) {
     },
 
     componentWillReceiveProps : function(){
-      console.log('%cThis.props: ', 'color:yellowgreen;font-weight:bold', this.props);
-      console.log('%cThis.state: ', 'color:orange;font-weight:bold', this.state);
-      console.log('THIS PROPS TAGTEXT === ""',(this.props.tagText === ""))
       if(this.props.tagText === "") {
         this.setState({
           tagText : ""
@@ -66,12 +64,7 @@ define(['react', './sorry'], function(React, sorry) {
 
     _saveTag: function handleSubmit(e) {
       e.preventDefault();
-      console.log('%cThis.props: ', 'color:yellowgreen;font-weight:bold', this.props);
-      console.log('%cThis.state: ', 'color:orange;font-weight:bold', this.state);
       this.props._updateTagList(this.state);
-    },
-    _removeTag : function(e) {
-      //TODO :) including the hook
     }
 
   });
@@ -82,7 +75,8 @@ define(['react', './sorry'], function(React, sorry) {
     if (IM_PREFIX.test(tagName)) {
       return false;
     }
-    return true;
+    console.log('tagName', tagName, LEGAL_CHARS.test(tagName));
+    return LEGAL_CHARS.test(tagName);
   }
 
   //check to make sure we don't have this tag in the array already.

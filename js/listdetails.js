@@ -11,7 +11,7 @@ define(['react', './tag-adder'], function(React, TagAdder) {
     getInitialState: function() {
       return {
         tags: this.props.list.tags,
-        tagText : this.props.tagText || ""
+        tagText: this.props.tagText || ""
       };
     },
 
@@ -44,39 +44,40 @@ define(['react', './tag-adder'], function(React, TagAdder) {
     _renderAddTagControl: function() {
       var ta = React.createElement(TagAdder, {
         list: this.props.list,
-        tagText : this.state.tagText,
-        _updateTagList: this._updateTagList,
-        _removeTag: this._removeTag
+        tagText: this.state.tagText,
+        _updateTagList: this._updateTagList
       });
-      console.log('rendering the tagadder with this:',ta);
       return ta;
     },
 
     //here we get the details from the tag adder, which is a bit dumb, and either add the tag
     //or display a useful error message.
     _updateTagList: function(tagAdderState) {
-      console.log('ok, so.', tagAdderState);
       var self = this;
       //if the tag is valid, add it.
       if (tagAdderState.isValid) {
-        this.props.list.addTags([tagAdderState.tagText]).then(function(){
-          console.log('setting state');
+        this.props.list.addTags([tagAdderState.tagText]).then(function() {
           self.setState({
             tags: self.props.list.tags,
-            tagText : ""
+            tagText: ""
           });
-          console.log('SELF',self);
         });
       } else if (tagAdderState.isDuplicate) {
         //sorry, dupe.
         console.log('dupe');
       } else {
         //misc error, or prefixed with 'im:'
-        console.log('derp');
+        console.log('bad prefix');
       }
     },
-    _removeTag: function(tag) {
-      //TODO
+    _removeTag: function(e) {
+      var tagToRemove = e.target.parentElement.textContent.trim(),
+      self = this;
+      this.props.list.removeTags([tagToRemove]).then(function(response) {
+        self.setState({
+          tags: response
+        });
+      });
     },
 
     _renderTag: function(tag, i) {
@@ -87,7 +88,9 @@ define(['react', './tag-adder'], function(React, TagAdder) {
         tag,
         ' ',
         d.i({
-          className: 'fa fa-times-circle'
+          className: 'fa fa-times-circle',
+          tagContent: tag,
+          onClick: this._removeTag
         })
       );
     }

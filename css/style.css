@@ -271,3 +271,8 @@ ul.nav-tabs > li.active > a {
 .row.fields {
     padding: 0 1em;
 }
+
+.tagManager .label {
+  display:inline-block;
+  margin:2px;
+}

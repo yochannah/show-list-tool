@@ -6,8 +6,11 @@ define(['react', './listheading'], function(React, Heading) {
     displayName: 'ListDetails',
 
     render: function() {
+      console.log('ListDetails here. Adding this tagText: "' + this.props.tagText + '"');
+
       return React.createElement(Heading, {
         list: this.props.list,
+        tagText : this.props.tagText,
         _updateTagList: this._updateTagList,
         _removeTag : this._removeTag
       });

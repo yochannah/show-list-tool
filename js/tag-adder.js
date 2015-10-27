@@ -12,13 +12,16 @@ define(['react', './sorry'], function(React, sorry) {
 
     getInitialState: function() {
       return {
-        tagText: null,
+        tagText: this.props.tagText,
         isValid: true,
         isDuplicate: false
       };
     },
 
     render: function() {
+      //reset tagText, but only if the previous value was saved and the tagtext
+      //property was emptied.
+
       return d.form({
           className: 'form-inline pull-right list-tagger',
           onSubmit: this._saveTag
@@ -29,7 +32,7 @@ define(['react', './sorry'], function(React, sorry) {
           d.input({
             ref: 'tagText',
             className: 'form-control input-sm',
-            value: this.state.newTag,
+            value: this.state.tagText,
             onChange: this._updatePotentialTag,
             placeholder: 'my new tag'
           })),
@@ -40,8 +43,13 @@ define(['react', './sorry'], function(React, sorry) {
       );
     },
 
+    componentWillReceiveProps : function(){
+      console.log('%cThis.props: ', 'color:yellowgreen;font-weight:bold', this.props);
+      console.log('%cThis.state: ', 'color:orange;font-weight:bold', this.state);
+    },
+
     _updatePotentialTag: function() {
-      var val = this.refs.tagText.value;
+      var val = this.refs.tagText.value || this.state.tagText;
       var state = this.state;
       state.tagText = val;
       state.isDuplicate = isDuplicateTagName(val, this.props.list.tags);

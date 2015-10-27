@@ -10,7 +10,8 @@ define(['react', './tag-adder'], function(React, TagAdder) {
 
     getInitialState: function() {
       return {
-        tags: this.props.list.tags
+        tags: this.props.list.tags,
+        tagText : ""
       };
     },
 
@@ -41,8 +42,10 @@ define(['react', './tag-adder'], function(React, TagAdder) {
     },
 
     _renderAddTagControl: function() {
+      console.log('ListHeading here. Adding this tagText: "_' + this.state.tagText + '_"');
       return React.createElement(TagAdder, {
         list: this.props.list,
+        tagText : this.state.tagText,
         _updateTagList: this._updateTagList,
         _removeTag: this._removeTag
       });
@@ -56,10 +59,12 @@ define(['react', './tag-adder'], function(React, TagAdder) {
       //if the tag is valid, add it.
       if (tagAdderState.isValid) {
         this.props.list.addTags([tagAdderState.tagText]).then(function(){
+          console.log('setting state');
           self.setState({
-            tags: self.props.list.tags
+            tags: self.props.list.tags,
+            tagText : "X"
           });
-          self.render();
+          console.log('SELF',self);
         });
       } else if (tagAdderState.isDuplicate) {
         //sorry, dupe.

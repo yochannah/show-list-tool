@@ -46,6 +46,12 @@ define(['react', './sorry'], function(React, sorry) {
     componentWillReceiveProps : function(){
       console.log('%cThis.props: ', 'color:yellowgreen;font-weight:bold', this.props);
       console.log('%cThis.state: ', 'color:orange;font-weight:bold', this.state);
+      console.log('THIS PROPS TAGTEXT === ""',(this.props.tagText === ""))
+      if(this.props.tagText === "") {
+        this.setState({
+          tagText : ""
+        });
+      }
     },
 
     _updatePotentialTag: function() {

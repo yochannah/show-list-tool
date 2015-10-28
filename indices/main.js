@@ -43,11 +43,11 @@ require.config({
 require(['react', 'reactdom', 'imjs', './analysis-tools', 'bootstrap'], function (React, ReactDOM, imjs, View) {
     'use strict';
 
-    //var listName = "PL FlyAtlas_tubules_top";
+//    var listName = "PL FlyAtlas_tubules_top";
     var listName = "My awesome list";
 //    var url = "http://www.flymine.org/query";
 
-    var url = "http://localhost:8080/flymine/service";
+    var url = "http://mynock:8080/flymine/service";
     var rootNode = document.getElementById('showlist');
     var service = imjs.Service.connect({root: url, token:'v1I54009a4N65c75K6Cf'});
     service.fetchList(listName).then(function showList (list) {

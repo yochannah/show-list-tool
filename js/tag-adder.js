@@ -3,7 +3,7 @@ define(['react', './sorry'], function(React, sorry) {
   'use strict';
 
   var IM_PREFIX = /^im:/i;
-  var LEGAL_CHARS = /^[\w\.\: \-]+$/g;
+  var LEGAL_CHARS = /^[\w\.\: \-]+$/;
 
   var d = React.DOM;
 
@@ -45,13 +45,14 @@ define(['react', './sorry'], function(React, sorry) {
     },
 
     componentWillReceiveProps : function(){
-      if(this.props.tagText === "") {
+      if(this.props.tagText === null) {
         this.setState({
           tagText : ""
         });
       }
     },
 
+    //checks if the tag is ok and updates the state of the form
     _updatePotentialTag: function() {
       var val = this.refs.tagText.value || this.state.tagText;
       var state = this.state;
@@ -62,6 +63,8 @@ define(['react', './sorry'], function(React, sorry) {
       this.setState(state);
     },
 
+    //passes the save action to the parent element.
+    //we don't save it here because the parent element has to re-render.
     _saveTag: function handleSubmit(e) {
       e.preventDefault();
       this.props._updateTagList(this.state);
@@ -72,10 +75,11 @@ define(['react', './sorry'], function(React, sorry) {
   return TagAdder;
 
   function isValidTagName(tagName) {
+    //don't allow user to create `im:` namespaced tags.
     if (IM_PREFIX.test(tagName)) {
       return false;
     }
-    console.log('tagName', tagName, LEGAL_CHARS.test(tagName));
+    //finally it's only ok to save if the chars in it are safe
     return LEGAL_CHARS.test(tagName);
   }
 

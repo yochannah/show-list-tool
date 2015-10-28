@@ -11,7 +11,7 @@ define(['react', './tag-adder'], function(React, TagAdder) {
     getInitialState: function() {
       return {
         tags: this.props.list.tags,
-        tagText: this.props.tagText || ""
+        tagText: this.props.tagText || null
       };
     },
 
@@ -59,15 +59,9 @@ define(['react', './tag-adder'], function(React, TagAdder) {
         this.props.list.addTags([tagAdderState.tagText]).then(function() {
           self.setState({
             tags: self.props.list.tags,
-            tagText: ""
+            tagText: null
           });
         });
-      } else if (tagAdderState.isDuplicate) {
-        //sorry, dupe.
-        console.log('dupe');
-      } else {
-        //misc error, or prefixed with 'im:'
-        console.log('bad prefix');
       }
     },
     _removeTag: function(e) {
